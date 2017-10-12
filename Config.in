@@ -40,6 +40,7 @@ endmenu
 menu "Crypto"
 	source "package/libcryptoxx/Config.in"
 	source "package/libgcrypt/Config.in"
+	source "package/libgpg-error/Config.in"
 	source "package/openssl/Config.in"
 endmenu
 
