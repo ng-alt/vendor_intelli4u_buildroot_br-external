@@ -76,6 +76,7 @@ endmenu
 menu "Networking"
 	source "package/geoip/Config.in"
 	source "package/libcurl/Config.in"
+	source "package/libmnl/Config.in"
 	source "package/libpcap/Config.in"
 endmenu
 
