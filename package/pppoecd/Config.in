@@ -1,0 +1,9 @@
+config BR2_PACKAGE_PPPOECD
+	bool "pppoecd"
+	help
+	  PPPoE is a technique for the encapsulation of PPP streams inside of
+	  Ethernet frames. The technology is being deployed by high-speed Internet
+	  access providers (cable modems, xDSL, etc.) in order to decouple the
+	  supply of bandwidth from ISP services.
+
+	  Further details on PPPoE can be found in RFC2516.
