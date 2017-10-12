@@ -13,6 +13,21 @@ config BR2_PACKAGE_IPTABLES_BPF_NFSYNPROXY
 	help
 	  Build bpf compiler and nfsynproxy configuration tool.
 
+config BR2_PACKAGE_IPTABLES_IPV4
+	bool "ip4tables"
+	help
+	  Build ip4tables
+
+config BR2_PACKAGE_IPTABLES_IPV6
+	bool "ip6tables"
+	help
+	  Build ip6tables
+
+config BR2_PACKAGE_IPTABLES_EXTENSIONS
+	bool "extensions"
+	help
+	  Build extensions
+
 config BR2_PACKAGE_IPTABLES_NFTABLES
 	bool "nftables compat"
 	# uses dlfcn

@@ -4,17 +4,15 @@
 #
 ################################################################################
 
-IPTABLES_VERSION = 1.6.1
-IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
 IPTABLES_SITE = http://ftp.netfilter.org/pub/iptables
+IPTABLES_AUTOGEN = YES
 IPTABLES_INSTALL_STAGING = YES
-IPTABLES_DEPENDENCIES = host-pkgconf \
+IPTABLES_DEPENDENCIES = host-pkgconf linux \
 	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
 IPTABLES_LICENSE = GPL-2.0
 IPTABLES_LICENSE_FILES = COPYING
 # Building static causes ugly warnings on some plugins
-IPTABLES_CONF_OPTS = --libexecdir=/usr/lib --with-kernel=$(STAGING_DIR)/usr \
-	$(if $(BR2_STATIC_LIBS),,--disable-static)
+IPTABLES_CONF_OPTS = --libexecdir=/usr/lib --with-kernel=$(LINUX_DIR)/usr
 
 # For connlabel match
 ifeq ($(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),y)
@@ -32,6 +30,18 @@ IPTABLES_CONF_OPTS += --enable-nftables
 IPTABLES_DEPENDENCIES += host-bison host-flex libmnl libnftnl
 else
 IPTABLES_CONF_OPTS += --disable-nftables
+endif
+
+ifneq ($(BR2_PACKAGE_IPTABLES_IPV4),y)
+IPTABLES_CONF_OPTS += --disable-ipv4
+else
+IPTABLES_CONF_OPTS += --enable-ipv4
+endif
+
+ifneq ($(BR2_PACKAGE_IPTABLES_IPV6),y)
+IPTABLES_CONF_OPTS += --disable-ipv6
+else
+IPTABLES_CONF_OPTS += --enable-ipv6
 endif
 
 # bpf compiler support and nfsynproxy tool
