@@ -52,6 +52,10 @@ menu "Hardware Handling"
 	source "package/udev/Config.in"
 endmenu
 
+menu "JSON/XML"
+	source "package/libxml2/Config.in"
+endmenu
+
 menu "Multimedia"
 	source "package/libogg/Config.in"
 endmenu
