@@ -132,6 +132,10 @@ menu "Networking applications"
 	source "package/zeroconf/Config.in"
 endmenu
 
+menu "Other GUIs"
+	source "package/wxwidgets/Config.in"
+endmenu
+
 menu "Router Core"
 	source "package/router/Config.in"
 endmenu
