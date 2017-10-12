@@ -10,6 +10,7 @@ endmenu
 menu "Audio and video applications"
 	source "package/ffmpeg/Config.in"
 	source "package/flac/Config.in"
+	source "package/udpxy/Config.in"
 endmenu
 
 menu "Compressors and decompressors"
