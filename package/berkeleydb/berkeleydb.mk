@@ -9,16 +9,17 @@
 # avoid licensing issues.
 # BerkeleyDB version 6 or above should be provided by a dedicated
 # package instead.
-BERKELEYDB_VERSION = 5.3.28
+
 BERKELEYDB_SITE = http://download.oracle.com/berkeley-db
-BERKELEYDB_SOURCE = db-$(BERKELEYDB_VERSION).NC.tar.gz
-BERKELEYDB_SUBDIR = build_unix
+BERKELEYDB_VERSION_FILE = dist/configure
 BERKELEYDB_LICENSE = BerkeleyDB License
 BERKELEYDB_LICENSE_FILES = LICENSE
 BERKELEYDB_INSTALL_STAGING = YES
 BERKELEYDB_BINARIES = db_archive db_checkpoint db_deadlock db_dump \
 	db_hotbackup db_load db_log_verify db_printlog db_recover db_replicate \
-	db_stat db_tuner db_upgrade db_verify
+	db_stat db_tuner db_upgrade db_verify db_codegen
+
+BERKELEYDB_SUBDIR = build_unix
 
 # Internal error, aborting at dw2gencfi.c:214 in emit_expr_encoded
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79509
@@ -26,29 +27,57 @@ ifeq ($(BR2_m68k_cf),y)
 BERKELEYDB_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -fno-dwarf2-cfi-asm"
 endif
 
-# build directory can't be the directory where configure are there, so..
-define BERKELEYDB_CONFIGURE_CMDS
-	(cd $(@D)/build_unix; rm -rf config.cache; \
-		$(TARGET_CONFIGURE_OPTS) \
-		$(TARGET_CONFIGURE_ARGS) \
-		$(BERKELEYDB_CONF_ENV) \
-		../dist/configure $(QUIET) \
+define BERKELEYDB_SYNC_ARCH_BUILD_FILE
+	rsync -au --chmod=u=rwX,go=rX $(BR2_EXTERNAL_NETGEAR_PATH)/package/berkeleydb/build_arm $(@D)
+endef
+
+define BERKELEYDB_DIST_CONFIGURE
+	cd $(@D)/$(BERKELEYDB_SUBDIR) && \
+	$(TARGET_CONFIGURE_OPTS) \
+	../dist/configure --prefix=/usr \
 		--target=$(GNU_TARGET_NAME) \
 		--host=$(GNU_TARGET_NAME) \
-		--build=$(GNU_HOST_NAME) \
-		--prefix=/usr \
-		--exec-prefix=/usr \
-		--sysconfdir=/etc \
-		--with-gnu-ld \
-		$(if $(BR2_INSTALL_LIBSTDCPP),--enable-cxx,--disable-cxx) \
+		--enable-cxx CFLAGS="-Os" \
+		--disable-cryptography \
+		--disable-hash \
+		--disable-queue \
+		--disable-replication \
+		--disable-statistics \
+		--disable-verify \
+		--disable-compat185 \
+		--disable-cxx \
+		--disable-diagnostic \
+		--disable-dump185 \
 		--disable-java \
+		--disable-mingw \
+		--disable-o_direct \
+		--enable-posixmutexes \
+		--disable-smallbuild \
 		--disable-tcl \
-		$(if $(BR2_PACKAGE_BERKELEYDB_COMPAT185),--enable-compat185,--disable-compat185) \
-		$(SHARED_STATIC_LIBS_OPTS) \
-		--with-pic \
-		--enable-o_direct \
-		$(if $(BR2_TOOLCHAIN_HAS_THREADS),--enable-mutexsupport,--disable-mutexsupport) \
-	)
+		--disable-test \
+		--disable-uimutexes \
+		--enable-umrw \
+		--disable-static \
+		--disable-libtool-lock
+endef
+
+BERKELEYDB_PRE_CONFIGURE_HOOKS += BERKELEYDB_DIST_CONFIGURE
+
+define BERKELEYDB_BUILD_CMDS
+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/$(BERKELEYDB_SUBDIR) \
+                BERKELEYDB_DIR="$(BERKELEYDB_DIR)" DESTDIR="$(TARGET_DIR)" all
+endef
+
+define BERKELEYDB_INSTALL_STAGING_CMDS
+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/$(BERKELEYDB_SUBDIR) \
+		HARDWARE_NAME=$(BR2_ARCH) DESTDIR="$(STAGING_DIR)" INSTALLDIR=$(STAGING_DIR) STRIP="$(TARGET_STRIP)" \
+		BERKELEYDB_DIR="$(BERKELEYDB_DIR)" INSTALLFLAGS=-m755 install
+endef
+
+define BERKELEYDB_INSTALL_TARGET_CMDS
+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/$(BERKELEYDB_SUBDIR) \
+		HARDWARE_NAME=$(BR2_ARCH) DESTDIR="$(TARGET_DIR)" INSTALLDIR=$(TARGET_DIR) STRIP="$(TARGET_STRIP)" \
+		BERKELEYDB_DIR="$(BERKELEYDB_DIR)" INSTALLFLAGS=-m755 install
 endef
 
 ifneq ($(BR2_PACKAGE_BERKELEYDB_TOOLS),y)
@@ -67,4 +96,4 @@ endef
 
 BERKELEYDB_POST_INSTALL_TARGET_HOOKS += BERKELEYDB_REMOVE_DOCS
 
-$(eval $(autotools-package))
+$(eval $(generic-package))
