@@ -94,6 +94,7 @@ endmenu
 
 menu "Text and terminal handling"
 	source "package/libiconv/Config.in"
+	source "package/libunistring/Config.in"
 endmenu
 
 menu "Networking applications"
