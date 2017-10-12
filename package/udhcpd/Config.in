@@ -1,0 +1,6 @@
+config BR2_PACKAGE_UDHCPD
+	bool "udhcpd"
+	help
+	  udhcp server/client package is primarily geared towards embedded
+	  systems. It does however, strive to be fully functionaly, and RFC
+	  compliant.
