@@ -1,0 +1,9 @@
+config BR2_PACKAGE_HD_IDLE
+	bool "Hard disk idle spin-down utility"
+	help
+	  hd-idle is a utility program for spinning-down external disks after a
+	  period of idle time. Sine most external IDE disk enclosures don't support
+	  setting the IDE idle timer, a program like hd-idle is required to spin
+	  down idle disks automatically.
+
+	  http://hd-idle.sf.net

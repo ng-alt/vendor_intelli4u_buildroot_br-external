@@ -53,6 +53,7 @@ endmenu
 
 menu "Hardware Handling"
 	source "package/dbus/Config.in"
+	source "package/hd-idle/Config.in"
 	source "package/hotplug2/Config.in"
 	source "package/udev/Config.in"
 endmenu
