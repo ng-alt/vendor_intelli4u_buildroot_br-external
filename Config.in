@@ -87,6 +87,7 @@ endmenu
 menu "Other"
 	source "package/libantlr/Config.in"
 	source "package/libdaemon/Config.in"
+	source "package/libevent/Config.in"
 endmenu
 
 menu "Networking applications"
