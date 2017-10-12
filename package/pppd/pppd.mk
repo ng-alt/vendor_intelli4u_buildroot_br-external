@@ -4,9 +4,8 @@
 #
 ################################################################################
 
-PPPD_VERSION = 2.4.7
-PPPD_SOURCE = ppp-$(PPPD_VERSION).tar.gz
 PPPD_SITE = https://download.samba.org/pub/ppp
+PPPD_VERSION_FILE = pppd/patchlevel.h
 PPPD_LICENSE = LGPL-2.0+, LGPL, BSD-4-Clause, BSD-3-Clause, GPL-2.0+
 PPPD_LICENSE_FILES = \
 	pppd/tdb.c pppd/plugins/pppoatm/COPYING \
@@ -14,7 +13,7 @@ PPPD_LICENSE_FILES = \
 
 PPPD_MAKE_OPTS = HAVE_INET6=y
 PPPD_INSTALL_STAGING = YES
-PPPD_TARGET_BINS = chat pppd pppdump pppstats
+PPPD_TARGET_BINS = pppd #chat pppd pppdump pppstats
 PPPD_RADIUS_CONF = \
 	dictionary dictionary.ascend dictionary.compat \
 	dictionary.merit dictionary.microsoft \
@@ -45,12 +44,13 @@ PPPD_POST_EXTRACT_HOOKS += PPPD_SET_RESOLV_CONF
 
 define PPPD_CONFIGURE_CMDS
 	$(SED) 's/FILTER=y/#FILTER=y/' $(PPPD_DIR)/pppd/Makefile.linux
+	$(SED) 's/#HAVE_INET6=y/HAVE_INET6=y/' $(PPPD_DIR)/pppd/Makefile.linux
 	$(SED) 's/ifneq ($$(wildcard \/usr\/include\/pcap-bpf.h),)/ifdef FILTER/' $(PPPD_DIR)/*/Makefile.linux
 	( cd $(@D); $(TARGET_MAKE_ENV) ./configure --prefix=/usr )
 endef
 
 define PPPD_BUILD_CMDS
-	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" COPTS="$(TARGET_CFLAGS)" \
+	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" COPTS="$(TARGET_CFLAGS)" \
 		-C $(@D) $(PPPD_MAKE_OPTS)
 endef
 
@@ -78,28 +78,32 @@ endif
 define PPPD_INSTALL_TARGET_CMDS
 	for sbin in $(PPPD_TARGET_BINS); do \
 		$(INSTALL) -D $(PPPD_DIR)/$$sbin/$$sbin \
-			$(TARGET_DIR)/usr/sbin/$$sbin; \
+			$(TARGET_DIR)/sbin/$$sbin; \
 	done
-	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/minconn.so \
-		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/minconn.so
-	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/passprompt.so \
-		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/passprompt.so
-	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/passwordfd.so \
-		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/passwordfd.so
-	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/pppoatm/pppoatm.so \
-		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/pppoatm.so
-	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/rp-pppoe/rp-pppoe.so \
-		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/rp-pppoe.so
-	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/rp-pppoe/pppoe-discovery \
-		$(TARGET_DIR)/usr/sbin/pppoe-discovery
-	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/winbind.so \
-		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/winbind.so
-	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/pppol2tp/openl2tp.so \
-		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/openl2tp.so
-	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/pppol2tp/pppol2tp.so \
-		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/pppol2tp.so
-	$(INSTALL) -D -m 0755 $(PPPD_DIR)/scripts/pon $(TARGET_DIR)/usr/bin/pon
-	$(INSTALL) -D -m 0755 $(PPPD_DIR)/scripts/poff $(TARGET_DIR)/usr/bin/poff
+	# create pppdv6 linked to pppd
+	if echo $(PPPD_TARGET_BINS) | grep -q pppd ; then \
+		ln -sf pppd $(TARGET_DIR)/sbin/pppdv6; \
+	fi \
+#	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/minconn.so \
+#		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/minconn.so
+#	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/passprompt.so \
+#		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/passprompt.so
+#	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/passwordfd.so \
+#		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/passwordfd.so
+#	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/pppoatm/pppoatm.so \
+#		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/pppoatm.so
+#	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/rp-pppoe/rp-pppoe.so \
+#		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/rp-pppoe.so
+#	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/rp-pppoe/pppoe-discovery \
+#		$(TARGET_DIR)/usr/sbin/pppoe-discovery
+#	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/winbind.so \
+#		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/winbind.so
+#	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/pppol2tp/openl2tp.so \
+#		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/openl2tp.so
+#	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/pppol2tp/pppol2tp.so \
+#		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/pppol2tp.so
+#	$(INSTALL) -D -m 0755 $(PPPD_DIR)/scripts/pon $(TARGET_DIR)/usr/bin/pon
+#	$(INSTALL) -D -m 0755 $(PPPD_DIR)/scripts/poff $(TARGET_DIR)/usr/bin/poff
 	$(PPPD_INSTALL_RADIUS)
 endef
 
