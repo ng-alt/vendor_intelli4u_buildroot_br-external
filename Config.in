@@ -2,6 +2,7 @@ menu "Target packages"
 	source "package/busybox/Config.in"
 
 menu "Audio/Sound"
+	source "package/alsa-lib/Config.in"
 	source "package/libid3tag/Config.in"
 	source "package/libvorbis/Config.in"
 endmenu
