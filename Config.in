@@ -84,6 +84,7 @@ menu "Networking"
 	source "package/libmnl/Config.in"
 	source "package/libnfnetlink/Config.in"
 	source "package/libpcap/Config.in"
+	source "package/neon/Config.in"
 endmenu
 
 menu "Other"
