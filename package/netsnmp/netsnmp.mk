@@ -4,9 +4,7 @@
 #
 ################################################################################
 
-NETSNMP_VERSION = 5.7.3
-NETSNMP_SITE = http://downloads.sourceforge.net/project/net-snmp/net-snmp/$(NETSNMP_VERSION)
-NETSNMP_SOURCE = net-snmp-$(NETSNMP_VERSION).tar.gz
+NETSNMP_SITE = http://downloads.sourceforge.net/project/net-snmp/net-snmp
 NETSNMP_LICENSE = Various BSD-like
 NETSNMP_LICENSE_FILES = COPYING
 NETSNMP_INSTALL_STAGING = YES
@@ -97,13 +95,6 @@ ifeq ($(BR2_PACKAGE_NETSNMP_CLIENTS),y)
 NETSNMP_CONF_OPTS += --enable-applications
 else
 NETSNMP_CONF_OPTS += --disable-applications
-endif
-
-ifeq ($(BR2_PACKAGE_NETSNMP_SERVER),y)
-define NETSNMP_INSTALL_INIT_SYSV
-	$(INSTALL) -D -m 0755 package/netsnmp/S59snmpd \
-		$(TARGET_DIR)/etc/init.d/S59snmpd
-endef
 endif
 
 define NETSNMP_STAGING_NETSNMP_CONFIG_FIXUP
