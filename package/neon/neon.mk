@@ -4,11 +4,13 @@
 #
 ################################################################################
 
-NEON_VERSION = 0.30.2
 NEON_SITE = http://www.webdav.org/neon
+NEON_VERSION_FILE = macros/neon.m4
+NEON_VERSION_PATTERN = "@(NE_VERSION_MAJOR).@(NE_VERSION_MINOR)@(NE_VERSION_PATCH)"
 NEON_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (manual and tests)
 NEON_LICENSE_FILES = src/COPYING.LIB test/COPYING README
-NEON_INSTALL_STAGING = YES
+NEON_AUTOGEN = YES
+# NEON_INSTALL_STAGING = YES
 NEON_CONF_OPTS = --without-gssapi --disable-rpath
 NEON_CONFIG_SCRIPTS = neon-config
 NEON_DEPENDENCIES = host-pkgconf
@@ -46,5 +48,21 @@ ifeq ($(BR2_PACKAGE_NEON_EXPAT)$(BR2_PACKAGE_NEON_LIBXML2),)
 # webdav needs xml support
 NEON_CONF_OPTS += --disable-webdav
 endif
+
+#- FIXME: use a script to generate the version file
+define NENO_GENERATE_VERSION_FILE
+	echo 0.29.6 > $(@D)/.version
+endef
+NENO_PRE_CONFIGURE_HOOKS = NENO_GENERATE_VERSION_FILE
+
+define NEON_INSTALL_STAGING_CMDS
+	$(HOST_MAKE_ENV) \
+		$(MAKE) DESTDIR=$(STAGING_DIR) -C $(@D) install-lib
+endef
+
+define NEON_INSTALL_TARGET_CMDS
+	$(HOST_MAKE_ENV) \
+		$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install-lib
+endef
 
 $(eval $(autotools-package))
