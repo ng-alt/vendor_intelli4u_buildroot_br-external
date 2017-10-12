@@ -4,21 +4,23 @@
 #
 ################################################################################
 
+OPENVPN_VERSION_FILE = configure.ac
+OPENVPN_VERSION_PATTERN = "@(mym4_version_major).@(mym4_version_minor)@(mym4_version_micro)"
 OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
 OPENVPN_VERSION_FILE = version.m4
 OPENVPN_DEPENDENCIES = host-pkgconf openssl
 OPENVPN_AUTORECONF = YES
 OPENVPN_LICENSE = GPL-2.0
 OPENVPN_LICENSE_FILES = COPYRIGHT.GPL
+
 OPENVPN_CONF_OPTS = \
-	--disable-plugin-auth-pam \
-	--disable-pam-dlopen \
+	--disable-debug \
+	--enable-management \
+	--disable-selinux \
+	--disable-socks \
+	--enable-plugin-auth-pam \
 	--enable-iproute2 \
-	--with-crypto-library=openssl \
-	$(if $(BR2_STATIC_LIBS),--disable-plugins)
-OPENVPN_CONF_ENV = \
-	CFLAGS="-I$(BR2_TOPDIR)$(ACOS)/include" \
-	LDFLAGS="-L$(TARGET_DIR)/usr/lib -lnvram"
+	ac_cv_lib_resolv_gethostbyname=no
 
 ifeq ($(BR2_PACKAGE_OPENVPN_SMALL),y)
 OPENVPN_CONF_OPTS += \
@@ -49,8 +51,7 @@ OPENVPN_CONF_OPTS += --disable-lzo
 endif
 
 define OPENVPN_INSTALL_TARGET_CMDS
-	$(INSTALL) -m 755 $(@D)/src/openvpn/openvpn \
-		$(TARGET_DIR)/usr/sbin/openvpn
+	$(INSTALL) -m 755 $(@D)/src/openvpn/openvpn $(TARGET_DIR)/usr/sbin/openvpn
 endef
 
 $(eval $(autotools-package))
