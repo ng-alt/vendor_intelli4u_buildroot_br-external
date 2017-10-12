@@ -4,9 +4,7 @@
 #
 ################################################################################
 
-BUSYBOX_VERSION = 1.27.1
 BUSYBOX_SITE = http://www.busybox.net/downloads
-BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
 BUSYBOX_LICENSE = GPL-2.0
 BUSYBOX_LICENSE_FILES = LICENSE
 
@@ -59,51 +57,6 @@ BUSYBOX_KCONFIG_FILE = $(BUSYBOX_CONFIG_FILE)
 BUSYBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES))
 BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
 BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
-
-ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
-define BUSYBOX_PERMISSIONS
-# Set permissions on all applets with BB_SUID_REQUIRE and BB_SUID_MAYBE.
-# 12 Applets are pulled from applets.h using grep command :
-#  grep -r -e "APPLET.*BB_SUID_REQUIRE\|APPLET.*BB_SUID_MAYBE" \
-#  $(@D)/include/applets.h 
-# These applets are added to the device table and the makedev file
-# ignores the files with type 'F' ( optional files).
-	/usr/bin/wall 			 F 4755 0  0 - - - - -
-	/bin/ping 			 F 4755 0  0 - - - - -
-	/bin/ping6 			 F 4755 0  0 - - - - -
-	/usr/bin/crontab 		 F 4755 0  0 - - - - -
-	/sbin/findfs 			 F 4755 0  0 - - - - -
-	/bin/login 			 F 4755 0  0 - - - - -
-	/bin/mount 			 F 4755 0  0 - - - - -
-	/usr/bin/passwd 		 F 4755 0  0 - - - - -
-	/bin/su 			 F 4755 0  0 - - - - -
-	/usr/bin/traceroute 		 F 4755 0  0 - - - - -
-	/usr/bin/traceroute6 		 F 4755 0  0 - - - - -
-	/usr/bin/vlock 			 F 4755 0  0 - - - - -
-endef
-else
-define BUSYBOX_PERMISSIONS
-	/bin/busybox                     f 4755 0  0 - - - - -
-endef
-endif
-
-# If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
-ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),y)
-define BUSYBOX_INSTALL_MDEV_SCRIPT
-	$(INSTALL) -D -m 0755 package/busybox/S10mdev \
-		$(TARGET_DIR)/etc/init.d/S10mdev
-endef
-define BUSYBOX_INSTALL_MDEV_CONF
-	$(INSTALL) -D -m 0644 package/busybox/mdev.conf \
-		$(TARGET_DIR)/etc/mdev.conf
-endef
-define BUSYBOX_SET_MDEV
-	$(call KCONFIG_ENABLE_OPT,CONFIG_MDEV,$(BUSYBOX_BUILD_CONFIG))
-	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_MDEV_CONF,$(BUSYBOX_BUILD_CONFIG))
-	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_MDEV_EXEC,$(BUSYBOX_BUILD_CONFIG))
-	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_MDEV_LOAD_FIRMWARE,$(BUSYBOX_BUILD_CONFIG))
-endef
-endif
 
 # sha passwords need USE_BB_CRYPT_SHA
 ifeq ($(BR2_TARGET_GENERIC_PASSWD_SHA256)$(BR2_TARGET_GENERIC_PASSWD_SHA512),y)
@@ -171,33 +124,6 @@ define BUSYBOX_MUSL_TWEAKS
 endef
 endif
 
-define BUSYBOX_INSTALL_UDHCPC_SCRIPT
-	if grep -q CONFIG_UDHCPC=y $(@D)/.config; then \
-		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
-			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
-		$(INSTALL) -m 0755 -d \
-			$(TARGET_DIR)/usr/share/udhcpc/default.script.d; \
-	fi
-endef
-
-ifeq ($(BR2_INIT_BUSYBOX),y)
-
-define BUSYBOX_SET_INIT
-	$(call KCONFIG_ENABLE_OPT,CONFIG_INIT,$(BUSYBOX_BUILD_CONFIG))
-endef
-
-ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
-define BUSYBOX_SET_GETTY
-	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(SYSTEM_GETTY_PORT)::respawn:/sbin/getty -L $(SYSTEM_GETTY_OPTIONS) $(SYSTEM_GETTY_PORT) $(SYSTEM_GETTY_BAUDRATE) $(SYSTEM_GETTY_TERM) #~' \
-		$(TARGET_DIR)/etc/inittab
-endef
-BUSYBOX_TARGET_FINALIZE_HOOKS += BUSYBOX_SET_GETTY
-endif # BR2_TARGET_GENERIC_GETTY
-
-BUSYBOX_TARGET_FINALIZE_HOOKS += SYSTEM_REMOUNT_ROOT_INITTAB
-
-endif # BR2_INIT_BUSYBOX
-
 ifeq ($(BR2_PACKAGE_BUSYBOX_SELINUX),y)
 BUSYBOX_DEPENDENCIES += host-pkgconf libselinux libsepol
 define BUSYBOX_SET_SELINUX
@@ -217,28 +143,9 @@ define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
 endef
 endif
 
-define BUSYBOX_INSTALL_LOGGING_SCRIPT
-	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
-		$(INSTALL) -m 0755 -D package/busybox/S01logging \
-			$(TARGET_DIR)/etc/init.d/S01logging; \
-	else rm -f $(TARGET_DIR)/etc/init.d/S01logging; fi
-endef
-
-ifeq ($(BR2_INIT_BUSYBOX),y)
-define BUSYBOX_INSTALL_INITTAB
-	$(INSTALL) -D -m 0644 package/busybox/inittab $(TARGET_DIR)/etc/inittab
-endef
-endif
-
 ifeq ($(BR2_PACKAGE_BUSYBOX_WATCHDOG),y)
 define BUSYBOX_SET_WATCHDOG
 	$(call KCONFIG_ENABLE_OPT,CONFIG_WATCHDOG,$(BUSYBOX_BUILD_CONFIG))
-endef
-define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
-	$(INSTALL) -D -m 0755 package/busybox/S15watchdog \
-		$(TARGET_DIR)/etc/init.d/S15watchdog
-	$(SED) s/PERIOD/$(call qstrip,$(BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD))/ \
-		$(TARGET_DIR)/etc/init.d/S15watchdog
 endef
 endif
 
@@ -250,19 +157,11 @@ endef
 BUSYBOX_DEPENDENCIES += linux-pam
 endif
 
-# Telnet support
-define BUSYBOX_INSTALL_TELNET_SCRIPT
-	if grep -q CONFIG_FEATURE_TELNETD_STANDALONE=y $(@D)/.config; then \
-		$(INSTALL) -m 0755 -D package/busybox/S50telnet \
-			$(TARGET_DIR)/etc/init.d/S50telnet ; \
-	fi
-endef
-
 # Enable "noclobber" in install.sh, to prevent BusyBox from overwriting any
 # full-blown versions of apps installed by other packages with sym/hard links.
-define BUSYBOX_NOCLOBBER_INSTALL
-	$(SED) 's/^noclobber="0"$$/noclobber="1"/' $(@D)/applets/install.sh
-endef
+# define BUSYBOX_NOCLOBBER_INSTALL
+# 	$(SED) 's/^noclobber="0"$$/noclobber="1"/' $(@D)/applets/install.sh
+# endef
 
 define BUSYBOX_KCONFIG_FIXUP_CMDS
 	$(BUSYBOX_SET_MMU)
@@ -271,7 +170,6 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
 	$(BUSYBOX_SET_CRYPT_SHA)
 	$(BUSYBOX_LINUX_PAM)
 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
-	$(BUSYBOX_SET_INIT)
 	$(BUSYBOX_SET_WATCHDOG)
 	$(BUSYBOX_SET_SELINUX)
 	$(BUSYBOX_SET_INDIVIDUAL_BINARIES)
@@ -283,22 +181,12 @@ define BUSYBOX_CONFIGURE_CMDS
 endef
 
 define BUSYBOX_BUILD_CMDS
+	ln -sf include/autoconf.h $(@D)/Config.h
 	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D)
 endef
 
 define BUSYBOX_INSTALL_TARGET_CMDS
 	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) install
-	$(BUSYBOX_INSTALL_INITTAB)
-	$(BUSYBOX_INSTALL_UDHCPC_SCRIPT)
-	$(BUSYBOX_INSTALL_MDEV_CONF)
-endef
-
-define BUSYBOX_INSTALL_INIT_SYSV
-	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
-	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
-	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
-	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
-	$(BUSYBOX_INSTALL_INDIVIDUAL_BINARIES)
 endef
 
 # Checks to give errors that the user can understand
