@@ -4,7 +4,6 @@
 #
 ################################################################################
 
-TOR_VERSION = 0.3.1.9
 TOR_SITE = https://dist.torproject.org
 TOR_LICENSE = BSD-3-Clause
 TOR_LICENSE_FILES = LICENSE
@@ -12,6 +11,7 @@ TOR_DEPENDENCIES = libevent openssl zlib
 TOR_AUTORECONF = YES
 
 TOR_CONF_OPTS = \
+	--disable-asciidoc \
 	--disable-gcc-hardening \
 	--disable-unittests \
 	--with-libevent-dir=$(STAGING_DIR)/usr \
