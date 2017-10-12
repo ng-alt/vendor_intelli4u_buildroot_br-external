@@ -4,9 +4,10 @@
 #
 ################################################################################
 
-PCRE_VERSION = 8.41
+PCRE_VERSION_FILE = configure.ac
+PCRE_VERSION_PATTERN = "@(pcre_major).@(pcre_minor)@(pcre_prerelease)"
 PCRE_SITE = https://ftp.pcre.org/pub/pcre
-PCRE_SOURCE = pcre-$(PCRE_VERSION).tar.bz2
+PCRE_AUTOGEN = YES
 PCRE_LICENSE = BSD-3-Clause
 PCRE_LICENSE_FILES = LICENCE
 PCRE_INSTALL_STAGING = YES
@@ -27,4 +28,3 @@ PCRE_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE_UTF),--enable-utf,--disable-utf)
 PCRE_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE_UCP),--enable-unicode-properties,--disable-unicode-properties)
 
 $(eval $(autotools-package))
-$(eval $(host-autotools-package))
