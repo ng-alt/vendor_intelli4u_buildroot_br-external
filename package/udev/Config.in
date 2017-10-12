@@ -1,6 +1,13 @@
-config BR2_PACKAGE_HAS_UDEV
-	bool
-
-config BR2_PACKAGE_PROVIDES_UDEV
-	string
-	depends on BR2_PACKAGE_HAS_UDEV
+config BR2_PACKAGE_UDEV
+	bool "udev"
+	help
+      udev will be responsible for responding to /sbin/hotplug on device
+      events. It will receive the device class information along with
+      device's sysfs directory.
+      
+      udev will consist of a command udev - to be called from /sbin/hotplug.
+      it will require the in memory dynamic database/table for keeping track
+      of current system devices, and a library of routines for accessing that
+      will be separated into the device naming subsystem. It's presented a
+      common device naming API by the device naming subsystem to use for naming
+      devices.
