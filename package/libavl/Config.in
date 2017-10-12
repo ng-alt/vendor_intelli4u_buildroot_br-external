@@ -1,0 +1,9 @@
+config BR2_PACKAGE_LIBAVL
+	bool libavl
+	help
+	  AVLTree is a small implementation of AVL trees for the C programming
+	  language. It is distributed under the library GPL.
+
+	  The library does the basic stuff. It allows for inserts, searches, and
+	  deletes in O(log n) time. It also allows the tree to be used as a linked
+	  indexable list (search/insert functions cannot be used in that case).

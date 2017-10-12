@@ -23,6 +23,7 @@ menu "Development tools"
 	source "package/flex/Config.in"
 	source "package/gettext/Config.in"
 	source "package/gperf/Config.in"
+	source "package/libavl/Config.in"
 endmenu
 
 menu "Filesystem and flash utilities"
