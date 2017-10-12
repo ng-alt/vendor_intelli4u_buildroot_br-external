@@ -60,6 +60,7 @@ menu "Interpreter languages and scripting"
 endmenu
 
 menu "JSON/XML"
+	source "package/expat/Config.in"
 	source "package/libxml2/Config.in"
 endmenu
 
