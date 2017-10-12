@@ -4,9 +4,6 @@
 #
 ################################################################################
 
-NFS_UTILS_VERSION = 1.3.3
-NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
-NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
 NFS_UTILS_LICENSE = GPL-2.0+
 NFS_UTILS_LICENSE_FILES = COPYING
 NFS_UTILS_AUTORECONF = YES
@@ -15,14 +12,14 @@ NFS_UTILS_DEPENDENCIES = host-pkgconf
 NFS_UTILS_CONF_ENV = knfsd_cv_bsd_signals=no
 
 NFS_UTILS_CONF_OPTS = \
+	--enable-nfsv3 \
 	--disable-nfsv4 \
 	--disable-nfsv41 \
 	--disable-gss \
 	--disable-uuid \
 	--disable-ipv6 \
-	--without-tcp-wrappers \
-	--with-statedir=/run/nfs \
-	--with-rpcgen=internal
+	--disable-mount \
+	--without-tcp-wrappers
 
 NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPCDEBUG) += usr/sbin/rpcdebug
 NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_LOCKD) += usr/sbin/rpc.lockd
@@ -42,14 +39,6 @@ else
 NFS_UTILS_CONF_OPTS += --disable-tirpc
 endif
 
-define NFS_UTILS_INSTALL_FIXUP
-	rm -f $(NFS_UTILS_TARGETS_)
-	touch $(TARGET_DIR)/etc/exports
-	$(INSTALL) -D -m 644 \
-		$(@D)/utils/mount/nfsmount.conf $(TARGET_DIR)/etc/nfsmount.conf
-endef
-NFS_UTILS_POST_INSTALL_TARGET_HOOKS += NFS_UTILS_INSTALL_FIXUP
-
 ifeq ($(BR2_INIT_SYSTEMD),y)
 NFS_UTILS_CONF_OPTS += --with-systemd=/usr/lib/systemd/system
 NFS_UTILS_DEPENDENCIES += systemd
@@ -57,30 +46,10 @@ else
 NFS_UTILS_CONF_OPTS += --without-systemd
 endif
 
-define NFS_UTILS_INSTALL_INIT_SYSV
-	$(INSTALL) -D -m 0755 package/nfs-utils/S60nfs \
-		$(TARGET_DIR)/etc/init.d/S60nfs
+define NFS_UTILS_DISABLE_INSTALLATION
+	$(SED) 's,SUBDIRS = tools support utils linux-nfs,SUBDIRS = support utils linux-nfs,' $(@D)/Makefile.am
 endef
-
-define NFS_UTILS_INSTALL_INIT_SYSTEMD
-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-
-	ln -fs ../../../../usr/lib/systemd/system/nfs-server.service \
-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nfs-server.service
-	ln -fs ../../../../usr/lib/systemd/system/nfs-client.target \
-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nfs-client.target
-
-	mkdir -p $(TARGET_DIR)/etc/systemd/system/remote-fs.target.wants
-
-	ln -fs ../../../../usr/lib/systemd/system/nfs-client.target \
-		$(TARGET_DIR)/etc/systemd/system/remote-fs.target.wants/nfs-client.target
-
-	$(INSTALL) -D -m 0755 package/nfs-utils/nfs-utils_env.sh \
-		$(TARGET_DIR)/usr/lib/systemd/scripts/nfs-utils_env.sh
-
-	$(INSTALL) -D -m 0644 package/nfs-utils/nfs-utils_tmpfiles.conf \
-		$(TARGET_DIR)/usr/lib/tmpfiles.d/nfs-utils.conf
-endef
+NFS_UTILS_PRE_CONFIGURE_HOOKS += NFS_UTILS_DISABLE_INSTALLATION
 
 define NFS_UTILS_REMOVE_NFSIOSTAT
 	rm -f $(TARGET_DIR)/usr/sbin/nfsiostat
