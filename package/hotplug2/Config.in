@@ -1,0 +1,14 @@
+config BR2_PACKAGE_HOTPLUG2
+	bool "hotplug2"
+	help
+	  hotplug2 is aimed at early Linux user space, that is, initramfs or
+	  initrd, possibly also at embedded devices (such as WRT-lik router) or
+	  very weak machines, such as 386/486.
+
+	  hotplug2 connects to the uevent netlink socket and read events. The
+	  application generally operates in two modes, dumb and smart. And hotplug2
+	  supports cold plugging simply by calling the 'udevtrigger' binary
+	  internally. As udevtrigger is fairly independent on the reset of udev,
+	  it can be easily embedded along with hotplug2.
+
+	  http://marc.theaimsgroup.com/?l=linux-hotplug-devel&m=115720744227751&w=2
