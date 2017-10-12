@@ -29,6 +29,7 @@ menu "Filesystem and flash utilities"
 endmenu
 
 menu "Compression and decompression"
+	source "package/lz4/Config.in"
 	source "package/lzo/Config.in"
 	source "package/zlib/Config.in"
 endmenu
