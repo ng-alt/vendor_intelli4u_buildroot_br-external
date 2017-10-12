@@ -90,6 +90,7 @@ endmenu
 menu "Text and terminal handling"
 	source "package/libiconv/Config.in"
 	source "package/ncurses/Config.in"
+	source "package/pcre/Config.in"
 endmenu
 
 menu "Networking applications"
