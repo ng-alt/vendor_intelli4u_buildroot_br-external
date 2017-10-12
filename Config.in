@@ -32,6 +32,7 @@ endmenu
 
 menu "Hardware handling"
 	source "package/hdparm/Config.in"
+	source "package/sdparm/Config.in"
 endmenu
 
 menu "Compression and decompression"
