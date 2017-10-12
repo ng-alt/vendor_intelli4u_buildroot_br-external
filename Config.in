@@ -72,6 +72,7 @@ menu "Networking"
 endmenu
 
 menu "Networking applications"
+	source "package/amule/Config.in"
 	source "package/bftpd/Config.in"
 	source "package/bridge-utils/Config.in"
 	source "package/dhcp/Config.in"
