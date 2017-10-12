@@ -1,6 +1,7 @@
 menu "Host utilities"
 
 	source "package/cramfs/Config.in.host"
+	source "package/e2fsprogs/Config.in.host"
 	source "package/zip/Config.in.host"
 
 endmenu

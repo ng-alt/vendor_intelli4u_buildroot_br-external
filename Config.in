@@ -26,6 +26,7 @@ endmenu
 
 menu "Filesystem and flash utilities"
 	source "package/cramfs/Config.in"
+	source "package/e2fsprogs/Config.in"
 	source "package/squashfs/Config.in"
 endmenu
 
