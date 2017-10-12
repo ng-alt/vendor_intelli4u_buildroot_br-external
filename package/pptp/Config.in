@@ -1,0 +1,8 @@
+config BR2_PACKAGE_PPTP
+    bool "pptp"
+    help
+      pptp is an implementation of the PPTP protocol for Linux and other
+      UNIX systems.
+
+      http://pptpclient.sourceforge.net/
+
