@@ -4,12 +4,11 @@
 #
 ################################################################################
 
-NANO_VERSION_MAJOR = 2.8
-NANO_VERSION = $(NANO_VERSION_MAJOR).7
-NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
 NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
 NANO_LICENSE = GPL-3.0+
 NANO_LICENSE_FILES = COPYING
+NANO_AUTOGEN = YES
+
 NANO_CONF_OPTS = \
 	--without-slang \
 	--with-wordbounds
@@ -34,5 +33,12 @@ define NANO_INSTALL_TARGET_CMDS
 	$(INSTALL) -m 0755 $(@D)/src/nano $(TARGET_DIR)/usr/bin/nano
 endef
 endif
+
+define NANO_FIX_UNMATCH
+    rsync -au $(BR2_TOPDIR)/external/gnulib $(@D)
+	$(SED) 's,1\.14,1.11,' -e '/po\/Makefile.in/d' $(@D)/configure.ac
+	$(SED) 's,doc ,,' -e 's,po ,,' $(@D)/Makefile.am
+endef
+NANO_PRE_CONFIGURE_HOOKS += NANO_FIX_UNMATCH
 
 $(eval $(autotools-package))
