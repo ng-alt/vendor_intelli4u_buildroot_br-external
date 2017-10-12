@@ -4,9 +4,7 @@
 #
 ################################################################################
 
-TRANSMISSION_VERSION = 2.93
 TRANSMISSION_SITE = https://github.com/transmission/transmission-releases/raw/master
-TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.xz
 TRANSMISSION_DEPENDENCIES = \
 	host-pkgconf \
 	host-intltool \
@@ -14,12 +12,20 @@ TRANSMISSION_DEPENDENCIES = \
 	libevent \
 	openssl \
 	zlib
-TRANSMISSION_AUTORECONF = YES
+TRANSMISSION_AUTOGEN = YES
+TRANSMISSION_AUTORECONF_ENV = AUTOGEN_SUBDIR_MODE=no
 TRANSMISSION_CONF_OPTS = \
 	--disable-libnotify \
-	--enable-lightweight
+	--enable-lightweight \
+	--disable-silent-rules
+
 TRANSMISSION_LICENSE = GPL-2.0 or GPL-3.0 with OpenSSL exception
 TRANSMISSION_LICENSE_FILES = COPYING
+
+define TRANSMISSION_REMOVE_ICONV
+    $(SED) 's,iconv_open,,g' \$(@D)/configure.ac
+endef
+TRANSMISSION_PRE_CONFIGURE_HOOKS += TRANSMISSION_REMOVE_ICONV
 
 ifeq ($(BR2_PACKAGE_LIBMINIUPNPC),y)
 TRANSMISSION_DEPENDENCIES += libminiupnpc
@@ -56,19 +62,6 @@ endif
 
 define TRANSMISSION_USERS
 	transmission -1 transmission -1 * /var/lib/transmission - transmission Transmission Daemon
-endef
-
-define TRANSMISSION_INSTALL_INIT_SYSV
-	$(INSTALL) -m 0755 -D package/transmission/S92transmission \
-		$(TARGET_DIR)/etc/init.d/S92transmission
-endef
-
-define TRANSMISSION_INSTALL_INIT_SYSTEMD
-	$(INSTALL) -D -m 0644 $(@D)/daemon/transmission-daemon.service \
-		$(TARGET_DIR)/usr/lib/systemd/system/transmission-daemon.service
-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-	ln -fs ../../../../usr/lib/systemd/system/transmission-daemon.service \
-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/transmission-daemon.service
 endef
 
 else
