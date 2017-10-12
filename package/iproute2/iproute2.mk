@@ -4,13 +4,15 @@
 #
 ################################################################################
 
-IPROUTE2_VERSION = 4.12.0
-IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+IPROUTE2_VERSION_FILE = $(BR2_TOPDIR)external/iproute2/include/SNAPSHOT.h
+IPROUTE2_VERSION_PATTERN = "static\s+char\s+SNAPSHOT\[]\s*=\s*\"(\d+)\";"
 IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
 IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
 	$(if $(BR2_PACKAGE_LIBMNL),libmnl)
 IPROUTE2_LICENSE = GPL-2.0+
 IPROUTE2_LICENSE_FILES = COPYING
+
+IPROUTE2_PRE_BUILD_HOOKS = ROUTER_ALL_MAKEFILES_INCLUDE_SUPPRESS_SUBROUTINE
 
 # If both iproute2 and busybox are selected, make certain we win
 # the fight over who gets to have their utils actually installed.
@@ -53,24 +55,21 @@ define IPROUTE2_REMOVE_IFCFG
 endef
 endif
 
-define IPROUTE2_CONFIGURE_CMDS
-	$(SED) 's/gcc/$$CC $$CFLAGS/g' $(@D)/configure
-	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure
+define IPROUTE2_BUILD_CMDS
 	$(IPROUTE2_DISABLE_ARPD)
 	$(IPROUTE2_WITH_IPTABLES)
-endef
-
-define IPROUTE2_BUILD_CMDS
+	$(IPROUTE2_ROUTER_SUPPRESS)
 	$(SED) 's/$$(CCOPTS)//' $(@D)/netem/Makefile
-	$(TARGET_MAKE_ENV) LDFLAGS="$(TARGET_LDFLAGS)" $(MAKE) \
+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
 		DBM_INCLUDE="$(STAGING_DIR)/usr/include" \
-		CCOPTS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
+		CCOPTS="$(TARGET_CFLAGS) -D_GNU_SOURCE -DCONFIG_KERNEL_2_6_36" \
 		SHARED_LIBS="$(if $(BR2_STATIC_LIBS),n,y)" -C $(@D)
 endef
 
 define IPROUTE2_INSTALL_TARGET_CMDS
-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" \
-		SBINDIR=/sbin \
+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+		DESTDIR="$(TARGET_DIR)" \
+		SBINDIR=/usr/sbin \
 		DOCDIR=/usr/share/doc/iproute2-$(IPROUTE2_VERSION) \
 		MANDIR=/usr/share/man install
 	$(IPROUTE2_REMOVE_IFCFG)
