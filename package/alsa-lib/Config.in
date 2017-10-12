@@ -75,4 +75,8 @@ config BR2_PACKAGE_ALSA_LIB_OLD_SYMBOLS
 	bool "old-symbols"
 	default y
 
+config BR2_PAKCAGE_ALSA_UCM
+	bool "ucm"
+	default y
+
 endif

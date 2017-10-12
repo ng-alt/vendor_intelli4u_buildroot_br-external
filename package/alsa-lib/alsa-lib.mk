@@ -4,8 +4,6 @@
 #
 ################################################################################
 
-ALSA_LIB_VERSION = 1.1.4.1
-ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
 ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
 ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
 ALSA_LIB_LICENSE_FILES = COPYING aserver/COPYING
@@ -13,6 +11,7 @@ ALSA_LIB_INSTALL_STAGING = YES
 ALSA_LIB_CFLAGS = $(TARGET_CFLAGS)
 ALSA_LIB_AUTORECONF = YES
 ALSA_LIB_CONF_OPTS = \
+	--with-configdir=/etc/alsa \
 	--with-alsa-devdir=$(call qstrip,$(BR2_PACKAGE_ALSA_LIB_DEVDIR)) \
 	--with-pcm-plugins="$(call qstrip,$(BR2_PACKAGE_ALSA_LIB_PCM_PLUGINS))" \
 	--with-ctl-plugins="$(call qstrip,$(BR2_PACKAGE_ALSA_LIB_CTL_PLUGINS))" \
@@ -51,6 +50,9 @@ endif
 ifneq ($(BR2_PACKAGE_ALSA_LIB_OLD_SYMBOLS),y)
 ALSA_LIB_CONF_OPTS += --disable-old-symbols
 endif
+ifneq ($(BR2_PAKCAGE_ALSA_UCM),y)
+ALSA_LIB_CONF_OPTS += --disable-ucm
+endif
 
 ifeq ($(BR2_PACKAGE_ALSA_LIB_PYTHON),y)
 ALSA_LIB_CONF_OPTS += \
@@ -71,5 +73,12 @@ endif
 ALSA_LIB_CONF_ENV = \
 	CFLAGS="$(ALSA_LIB_CFLAGS)" \
 	LDFLAGS="$(TARGET_LDFLAGS) -lm"
+
+define ALSA_LIB_DISABLE_UNUSED_CONF_FILES
+	$(SED) '/^SUBDIRS=cards pcm alsa.conf.d/d' $(@D)/src/conf/Makefile.am
+endef
+
+ALSA_LIB_PRE_CONFIGURE_HOOKS += ALSA_LIB_DISABLE_UNUSED_CONF_FILES
+
 
 $(eval $(autotools-package))
