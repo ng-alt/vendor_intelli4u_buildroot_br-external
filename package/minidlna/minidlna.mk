@@ -8,7 +8,7 @@ MINIDLNA_SITE = http://downloads.sourceforge.net/project/minidlna/minidlna
 MINIDLNA_VERSION_FILE = upnpglobalvars.h
 MINIDLNA_LICENSE = GPL-2.0, BSD-3-Clause
 MINIDLNA_LICENSE_FILES = COPYING LICENCE.miniupnpd
-
+MINIDLNA_AUTOGEN = YES
 MINIDLNA_DEPENDENCIES = \
 	$(TARGET_NLS_DEPENDENCIES) \
 	flac libvorbis libogg libid3tag libexif libjpeg sqlite
@@ -42,9 +42,9 @@ define MINIDLNA_BUILD_CMDS
 endef
 
 define MINIDLNA_INSTALL_TARGET_CMDS
-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) install \
-		DESTDIR=$(TARGET_DIR) TARGETDIR=$(TARGET_DIR) PREFIX=$(TARGET_DIR)
-	ln -sf minidlna $(TARGET_DIR)/usr/sbin/minidlna.exe
+	$(INSTALL) -D $(@D)/minidlnad $(TARGET_DIR)/usr/sbin/minidlna
 endef
 
-$(eval $(generic-package))
+
+$(eval $(autotools-package))
+
