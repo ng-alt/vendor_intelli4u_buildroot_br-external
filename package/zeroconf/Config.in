@@ -1,0 +1,11 @@
+config BR2_PACKAGE_ZEROCONF
+	bool "zeroconf"
+	help
+	  zeroconf is an implementation of IPv4 link-local addresses (RFC3927)
+	  which can be used for ad-hoc neworks. Addresses are allocated from the
+	  169.254.0.0/16 range semi-randomly. That menas making it possible to
+	  take two laptop computers, and connect them with a crossover Ethernet
+	  cable, and have them communicate usefully using IP, without needing
+	  any additional setup.
+
+	  http://www.zeroconf.org
