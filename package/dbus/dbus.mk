@@ -4,31 +4,28 @@
 #
 ################################################################################
 
-DBUS_VERSION = 1.12.0
 DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
+DBUS_AUTORECONF = YES
 DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
 DBUS_LICENSE_FILES = COPYING
 DBUS_INSTALL_STAGING = YES
 
-define DBUS_PERMISSIONS
-	/usr/libexec/dbus-daemon-launch-helper f 4755 0 0 - - - - -
-endef
-
-define DBUS_USERS
-	dbus -1 dbus -1 * /var/run/dbus - dbus DBus messagebus user
-endef
-
 DBUS_DEPENDENCIES = host-pkgconf expat
 
+DBUS_CONF_ENV = ac_cv_have_abstract_sockets=yes
 DBUS_CONF_OPTS = \
 	--with-dbus-user=dbus \
 	--disable-tests \
 	--disable-asserts \
-	--disable-xml-docs \
+	--enable-abstract-sockets \
+	--disable-selinux \
+	--enable-xml-docs \
 	--disable-doxygen-docs \
+	--disable-dnotify \
 	--with-xml=expat \
 	--with-system-socket=/var/run/dbus/system_bus_socket \
-	--with-system-pid-file=/var/run/messagebus.pid
+	--with-system-pid-file=/var/run/messagebus.pid \
+	--with-init-scripts=none
 
 ifeq ($(BR2_STATIC_LIBS),y)
 DBUS_CONF_OPTS += LIBS='-pthread'
@@ -72,6 +69,16 @@ else
 DBUS_CONF_OPTS += --disable-systemd
 endif
 
+define DBUS_REMOVE_DEVFILES
+	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
+endef
+
+define DBUS_REMOVE_UNNEEDED_FILES
+	$(SED) 's/SUBDIRS=dbus bus tools test doc/SUBDIRS=dbus bus/g' $(@D)/Makefile.am
+endef
+
+DBUS_PRE_CONFIGURE_HOOKS += DBUS_REMOVE_UNNEEDED_FILES
+
 # fix rebuild (dbus makefile errors out if /var/lib/dbus is a symlink)
 define DBUS_REMOVE_VAR_LIB_DBUS
 	rm -rf $(TARGET_DIR)/var/lib/dbus
@@ -79,44 +86,10 @@ endef
 
 DBUS_PRE_INSTALL_TARGET_HOOKS += DBUS_REMOVE_VAR_LIB_DBUS
 
-define DBUS_REMOVE_DEVFILES
-	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
-endef
-
-DBUS_POST_INSTALL_TARGET_HOOKS += DBUS_REMOVE_DEVFILES
-
-define DBUS_INSTALL_INIT_SYSV
-	$(INSTALL) -m 0755 -D package/dbus/S30dbus \
-		$(TARGET_DIR)/etc/init.d/S30dbus
-
-	mkdir -p $(TARGET_DIR)/var/lib
-	rm -rf $(TARGET_DIR)/var/lib/dbus
-	ln -sf /tmp/dbus $(TARGET_DIR)/var/lib/dbus
-endef
-
-define DBUS_INSTALL_INIT_SYSTEMD
-	mkdir -p $(TARGET_DIR)/var/lib/dbus
-	ln -sf /etc/machine-id $(TARGET_DIR)/var/lib/dbus/machine-id
-endef
-
-HOST_DBUS_DEPENDENCIES = host-pkgconf host-expat
-HOST_DBUS_CONF_OPTS = \
-	--with-dbus-user=dbus \
-	--disable-tests \
-	--disable-asserts \
-	--disable-selinux \
-	--disable-xml-docs \
-	--disable-doxygen-docs \
-	--without-x \
-	--with-xml=expat
-
-# dbus for the host
-DBUS_HOST_INTROSPECT = $(HOST_DBUS_DIR)/introspect.xml
-
-HOST_DBUS_GEN_INTROSPECT = \
-	$(HOST_DIR)/bin/dbus-daemon --introspect > $(DBUS_HOST_INTROSPECT)
-
-HOST_DBUS_POST_INSTALL_HOOKS += HOST_DBUS_GEN_INTROSPECT
+#define DBUS_REMOVE_DEVFILES
+#	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
+#endef
+#
+#DBUS_POST_INSTALL_TARGET_HOOKS += DBUS_REMOVE_DEVFILES
 
 $(eval $(autotools-package))
-$(eval $(host-autotools-package))
