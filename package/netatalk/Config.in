@@ -18,3 +18,32 @@ config BR2_PACKAGE_NETATALK
 comment "netatalk needs a toolchain w/ threads, dynamic library"
 	depends on BR2_USE_MMU
 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+
+if BR2_PACKAGE_NETATALK
+
+config BR2_PACKAGE_NETATALK_A2BOOT
+	bool "a2boot"
+	help
+	  a2boot
+      
+config BR2_PACKAGE_NETATALK_ATFUNCS
+	bool "atfuncs"
+	help
+	  at funcs
+      
+config BR2_PACKAGE_NETATALK_APPLETAK
+	bool "ddp (AppleTalk)"
+	help
+	  enable DDP (AppleTalk)
+      
+config BR2_PACKAGE_NETATALK_BINARIES
+	bool "binaries"
+	help
+	  keep netatalk binaries
+
+config BR2_PACKAGE_NETATALK_TIMELORD
+	bool "timelord"
+	help
+	  timelord  
+      
+endif
