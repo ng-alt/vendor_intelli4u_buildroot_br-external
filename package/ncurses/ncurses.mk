@@ -4,10 +4,9 @@
 #
 ################################################################################
 
-NCURSES_VERSION = 6.0
 NCURSES_SITE = $(BR2_GNU_MIRROR)/ncurses
 NCURSES_INSTALL_STAGING = YES
-NCURSES_DEPENDENCIES = host-ncurses
+#NCURSES_DEPENDENCIES = host-ncurses
 NCURSES_LICENSE = MIT with advertising clause
 NCURSES_LICENSE_FILES = README
 NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)6-config
@@ -155,4 +154,3 @@ HOST_NCURSES_CONF_OPTS = \
 	--without-normal
 
 $(eval $(autotools-package))
-$(eval $(host-autotools-package))
