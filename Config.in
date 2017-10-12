@@ -92,6 +92,10 @@ menu "Other"
 	source "package/libevent/Config.in"
 endmenu
 
+menu "Text and terminal handling"
+	source "package/libiconv/Config.in"
+endmenu
+
 menu "Networking applications"
 	source "package/amule/Config.in"
 	source "package/avahi/Config.in"
