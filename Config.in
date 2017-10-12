@@ -1,0 +1,79 @@
+menu "Target packages"
+	source "package/busybox/Config.in"
+
+menu "Audio/Sound"
+	source "package/libid3tag/Config.in"
+	source "package/libvorbis/Config.in"
+endmenu
+
+menu "Audio and video applications"
+	source "package/ffmpeg/Config.in"
+	source "package/flac/Config.in"
+endmenu
+
+menu "Compressors and decompressors"
+	source "package/bzip2/Config.in"
+	source "package/unzip/Config.in"
+	source "package/xz/Config.in"
+	source "package/zip/Config.in"
+endmenu
+
+menu "Development tools"
+	source "package/flex/Config.in"
+	source "package/gettext/Config.in"
+endmenu
+
+menu "Filesystem and flash utilities"
+	source "package/cramfs/Config.in"
+	source "package/squashfs/Config.in"
+endmenu
+
+menu "Compression and decompression"
+	source "package/lzo/Config.in"
+	source "package/zlib/Config.in"
+endmenu
+
+menu "Crypto"
+	source "package/openssl/Config.in"
+endmenu
+
+menu "Database"
+	source "package/sqlite/Config.in"
+endmenu
+
+menu "Graphics"
+	source "package/jpeg/Config.in"
+	source "package/libexif/Config.in"
+endmenu
+
+menu "Hardware Handling"
+	source "package/udev/Config.in"
+endmenu
+
+menu "Multimedia"
+	source "package/libogg/Config.in"
+endmenu
+
+menu "Networking"
+	source "package/geoip/Config.in"
+	source "package/libcurl/Config.in"
+	source "package/libpcap/Config.in"
+endmenu
+
+menu "Networking applications"
+	source "package/bridge-utils/Config.in"
+	source "package/dhcp/Config.in"
+	source "package/dnsmasq/Config.in"
+	source "package/igmpv3proxy/Config.in"
+	source "package/iproute2/Config.in"
+	source "package/iptables/Config.in"
+	source "package/minidlna/Config.in"
+	source "package/openvpn/Config.in"
+	source "package/pppd/Config.in"
+	source "package/radvd/Config.in"
+	source "package/tcpdump/Config.in"
+	source "package/wget/Config.in"
+	source "package/zebra/Config.in"
+endmenu
+
+endmenu
