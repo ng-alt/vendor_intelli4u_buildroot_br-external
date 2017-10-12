@@ -79,6 +79,7 @@ endmenu
 
 menu "Other"
 	source "package/libdaemon/Config.in"
+	source "package/libevent/Config.in"
 endmenu
 
 menu "Networking applications"
