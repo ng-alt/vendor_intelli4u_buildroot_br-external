@@ -30,6 +30,10 @@ menu "Filesystem and flash utilities"
 	source "package/squashfs/Config.in"
 endmenu
 
+menu "Hardware handling"
+	source "package/hdparm/Config.in"
+endmenu
+
 menu "Compression and decompression"
 	source "package/lz4/Config.in"
 	source "package/lzo/Config.in"
