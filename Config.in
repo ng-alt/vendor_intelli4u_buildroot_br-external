@@ -77,6 +77,10 @@ menu "Networking"
 	source "package/libpcap/Config.in"
 endmenu
 
+menu "Other"
+	source "package/libdaemon/Config.in"
+endmenu
+
 menu "Networking applications"
 	source "package/avahi/Config.in"
 	source "package/bftpd/Config.in"
