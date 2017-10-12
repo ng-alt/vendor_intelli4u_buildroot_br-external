@@ -13,7 +13,7 @@ PPPD_LICENSE_FILES = \
 
 PPPD_MAKE_OPTS = HAVE_INET6=y
 PPPD_INSTALL_STAGING = YES
-PPPD_TARGET_BINS = pppd #chat pppd pppdump pppstats
+PPPD_TARGET_BINS = pppd chat #pppdump pppstats
 PPPD_RADIUS_CONF = \
 	dictionary dictionary.ascend dictionary.compat \
 	dictionary.merit dictionary.microsoft \
@@ -78,11 +78,11 @@ endif
 define PPPD_INSTALL_TARGET_CMDS
 	for sbin in $(PPPD_TARGET_BINS); do \
 		$(INSTALL) -D $(PPPD_DIR)/$$sbin/$$sbin \
-			$(TARGET_DIR)/sbin/$$sbin; \
+			$(TARGET_DIR)/usr/sbin/$$sbin; \
 	done
 	# create pppdv6 linked to pppd
 	if echo $(PPPD_TARGET_BINS) | grep -q pppd ; then \
-		ln -sf pppd $(TARGET_DIR)/sbin/pppdv6; \
+		ln -sf pppd $(TARGET_DIR)/usr/sbin/pppdv6; \
 	fi \
 #	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/minconn.so \
 #		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/minconn.so
