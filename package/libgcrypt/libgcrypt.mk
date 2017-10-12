@@ -4,11 +4,12 @@
 #
 ################################################################################
 
-LIBGCRYPT_VERSION = 1.8.1
-LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+GDBM_VERSION_FILE = configure.ac
+GDBM_VERSION_PATTERN = "@(mym4_version_major).@(mym4_version_minor).@(mym4_version_micro)"
 LIBGCRYPT_LICENSE = LGPL-2.1+
 LIBGCRYPT_LICENSE_FILES = COPYING.LIB
 LIBGCRYPT_SITE = https://gnupg.org/ftp/gcrypt/libgcrypt
+LIBGCRYPT_AUTOGEN = YES
 LIBGCRYPT_INSTALL_STAGING = YES
 LIBGCRYPT_DEPENDENCIES = libgpg-error
 LIBGCRYPT_CONFIG_SCRIPTS = libgcrypt-config
@@ -29,10 +30,10 @@ LIBGCRYPT_CONF_ENV += CFLAGS="$(patsubst -mthumb,,$(TARGET_CFLAGS))"
 endif
 
 # Tests use fork()
-define LIBGCRYPT_DISABLE_TESTS
-	$(SED) 's/ tests//' $(@D)/Makefile.in
+define LIBGCRYPT_DISABLE_SUBDIR
+	$(SED) 's/ doc tests//' $(@D)/Makefile.am
 endef
 
-LIBGCRYPT_POST_PATCH_HOOKS += LIBGCRYPT_DISABLE_TESTS
+LIBGCRYPT_PRE_CONFIGURE_HOOKS += LIBGCRYPT_DISABLE_SUBDIR
 
 $(eval $(autotools-package))
