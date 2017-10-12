@@ -4,9 +4,8 @@
 #
 ################################################################################
 
-ZLIB_VERSION = 1.2.11
-ZLIB_SOURCE = zlib-$(ZLIB_VERSION).tar.xz
 ZLIB_SITE = http://www.zlib.net
+ZLIB_VERSION_FILE = zlib.h
 ZLIB_LICENSE = Zlib
 ZLIB_LICENSE_FILES = README
 ZLIB_INSTALL_STAGING = YES
