@@ -4,7 +4,8 @@
 #
 ################################################################################
 
-SQUASHFS_VERSION = 3de1687d7432ea9b302c2db9521996f506c140a3
+SQUASHFS_VERSION_FILE = squashfs-tools/mksquashfs.c
+SQUASHFS_VERSION_PATTERN = "^.+mksquashfs\s+version\s+([^\s+]+) .+$$"
 SQUASHFS_SITE = https://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools.git
 SQUASHFS_SITE_METHOD = git
 SQUASHFS_LICENSE = GPL-2.0+
@@ -54,7 +55,8 @@ HOST_SQUASHFS_MAKE_ARGS = \
 	GZIP_SUPPORT=1 \
 	LZ4_SUPPORT=1 \
 	LZO_SUPPORT=1 \
-	LZMA_XZ_SUPPORT=1
+	LZMA_XZ_SUPPORT=1 \
+	COMP_DEFAULT=xz
 
 define SQUASHFS_BUILD_CMDS
 	$(TARGET_MAKE_ENV) $(MAKE) \
@@ -84,5 +86,4 @@ define HOST_SQUASHFS_INSTALL_CMDS
 		-C $(@D)/squashfs-tools/ INSTALL_DIR=$(HOST_DIR)/bin install
 endef
 
-$(eval $(generic-package))
 $(eval $(host-generic-package))
