@@ -125,6 +125,10 @@ comment "Utilities"
 	source "package/easy-rsa/Config.in"
 endmenu
 
+menu "Text editors and viewers"
+	source "package/nano/Config.in"
+endmenu
+
 menu "Router Core"
 	source "package/router/Config.in"
 endmenu
