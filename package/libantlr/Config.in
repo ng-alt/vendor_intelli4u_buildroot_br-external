@@ -1,0 +1,6 @@
+config BR2_PACKAGE_LIBANTLR
+	bool "libantlr"
+	help
+	  ANTLR is the most powerful, easy-to-use parser generator
+	  built to date, and represents the culmination of more than
+	  15 years of research.
