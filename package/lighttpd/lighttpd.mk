@@ -4,10 +4,7 @@
 #
 ################################################################################
 
-LIGHTTPD_VERSION_MAJOR = 1.4
-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).45
-LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
-LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+LIGHTTPD_AUTOGEN = YES
 LIGHTTPD_LICENSE = BSD-3-Clause
 LIGHTTPD_LICENSE_FILES = COPYING
 LIGHTTPD_DEPENDENCIES = host-pkgconf
@@ -57,45 +54,22 @@ else
 LIGHTTPD_CONF_OPTS += --without-webdav-props --without-webdav-locks
 endif
 
+ifeq ($(BR2_PACKAGE_LIGHTTPD_SAMBA),y)
+LIGHTTPD_DEPENDENCIES += libxml2 sqlite libsmbclient
+# merlin extension has samba version limitation, refer the path strictly here
+LIGHTTPD_CONF_OPTS += \
+	--with-smbdav-locks \
+	--with-smbdav-props \
+	--with-libsmbclient=$(LIBSMBCLIENT_DIR)/source3
+else
+LIGHTTPD_CONF_OPTS += --without-smbdav-props
+endif
+
 ifeq ($(BR2_PACKAGE_LIGHTTPD_LUA),y)
 LIGHTTPD_DEPENDENCIES += lua
 LIGHTTPD_CONF_OPTS += --with-lua
 else
 LIGHTTPD_CONF_OPTS += --without-lua
 endif
-
-define LIGHTTPD_INSTALL_CONFIG
-	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/lighttpd/conf.d
-	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/www
-	$(INSTALL) -D -m 0644 $(@D)/doc/config/lighttpd.conf \
-		$(TARGET_DIR)/etc/lighttpd/lighttpd.conf
-	$(INSTALL) -D -m 0644 $(@D)/doc/config/modules.conf \
-		$(TARGET_DIR)/etc/lighttpd/modules.conf
-	$(INSTALL) -D -m 0644 $(@D)/doc/config/conf.d/access_log.conf \
-		$(TARGET_DIR)/etc/lighttpd/conf.d/access_log.conf
-	$(INSTALL) -D -m 0644 $(@D)/doc/config/conf.d/debug.conf \
-		$(TARGET_DIR)/etc/lighttpd/conf.d/debug.conf
-	$(INSTALL) -D -m 0644 $(@D)/doc/config/conf.d/dirlisting.conf \
-		$(TARGET_DIR)/etc/lighttpd/conf.d/dirlisting.conf
-	$(INSTALL) -D -m 0644 $(@D)/doc/config/conf.d/mime.conf \
-		$(TARGET_DIR)/etc/lighttpd/conf.d/mime.conf
-endef
-
-LIGHTTPD_POST_INSTALL_TARGET_HOOKS += LIGHTTPD_INSTALL_CONFIG
-
-define LIGHTTPD_INSTALL_INIT_SYSV
-	$(INSTALL) -D -m 0755 package/lighttpd/S50lighttpd \
-		$(TARGET_DIR)/etc/init.d/S50lighttpd
-endef
-
-define LIGHTTPD_INSTALL_INIT_SYSTEMD
-	$(INSTALL) -D -m 0644 $(@D)/doc/systemd/lighttpd.service \
-		$(TARGET_DIR)/usr/lib/systemd/system/lighttpd.service
-
-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-
-	ln -fs ../../../../usr/lib/systemd/system/lighttpd.service \
-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/lighttpd.service
-endef
 
 $(eval $(autotools-package))

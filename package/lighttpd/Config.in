@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIGHTTPD
 	bool "lighttpd"
 	depends on BR2_USE_MMU # fork()
 	depends on !BR2_STATIC_LIBS
+	select BR2_PACKAGE_LIBSMBCLIENT
 	help
 	  lighttpd a secure, fast, compliant and very flexible
 	  web-server which has been optimized for high-performance
@@ -50,6 +51,12 @@ config BR2_PACKAGE_LIGHTTPD_WEBDAV
 	select BR2_PACKAGE_SQLITE
 	help
 	  Enable webdav support. Needed to support mod_webdav
+
+config BR2_PACKAGE_LIGHTTPD_SAMBA
+	bool "samba support"
+	select BR2_PACKAGE_SAMBA
+	help
+	  Enable samba support.
 
 config BR2_PACKAGE_LIGHTTPD_LUA
 	bool "lua support"
