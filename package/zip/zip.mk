@@ -4,8 +4,6 @@
 #
 ################################################################################
 
-ZIP_VERSION = 30
-ZIP_SOURCE = zip$(ZIP_VERSION).tgz
 ZIP_SITE = ftp://ftp.info-zip.org/pub/infozip/src
 ZIP_LICENSE = Info-ZIP
 ZIP_LICENSE_FILES = LICENSE
@@ -35,20 +33,7 @@ endef
 
 define ZIP_INSTALL_TARGET_CMDS
 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) -f unix/Makefile install \
-		prefix=$(TARGET_DIR)/usr
-endef
-
-define HOST_ZIP_BUILD_CMDS
-	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) \
-		CFLAGS="$(HOST_CFLAGS) $(ZIP_CFLAGS)" \
-		AS="$(HOSTCC) -c" \
-		-f unix/Makefile generic
-endef
-
-define HOST_ZIP_INSTALL_CMDS
-	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) -f unix/Makefile install \
-		prefix=$(HOST_DIR)
+		TARGETDIR=$(TARGET_DIR)
 endef
 
 $(eval $(generic-package))
-$(eval $(host-generic-package))
