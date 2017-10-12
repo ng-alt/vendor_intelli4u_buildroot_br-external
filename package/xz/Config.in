@@ -12,3 +12,42 @@ config BR2_PACKAGE_XZ
 	  package.
 
 	  http://tukaani.org/xz/
+
+if BR2_PACKAGE_XZ
+config BR2_PACKAGE_XZ_XZ
+	bool "xz"
+	default y
+	help
+	  build xz tool
+      
+config BR2_PACKAGE_XZ_XZDEC
+	bool "xzdec"
+	default y
+	help
+	  build xzdec
+      
+config BR2_PACKAGE_XZ_LZXZDEC
+	bool "lzmadec"
+	default y
+    help
+      build lzmadec
+      
+config BR2_PACKAGE_XZ_LZMAINFO
+	bool "lzmainfo"
+	default y
+	help
+	  build lzmainfo
+      
+config BR2_PACKAGE_XZ_LZMALINK
+	bool "lzmalink"
+	default y
+	help
+	  create symlinks for LZMA utils compatibility
+    
+config BR2_PACKAGE_XZ_LZMA_SCRIPTS
+	bool "lzma scripts"
+	default y
+	help
+	  install the scripts xzdiff, xzgrep, xzless, xzmore and their links
+
+endif
