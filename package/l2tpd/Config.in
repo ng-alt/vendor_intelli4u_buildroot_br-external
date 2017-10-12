@@ -1,0 +1,8 @@
+config BR2_PACKAGE_L2TPD
+	bool "l2tpd"
+	help
+	  l2tpd is an implementation of the layer two tunneling protocol. It works
+	  in user space completely (althought kernel work is planned after the
+	  userspace version is stablized). l2tpd works by opening a pseudo-tty for
+	  communcating with pppd. Although 2tpd was written for Linux, the current
+	  version should be highly portable to other UNIX's supported by pppd.
