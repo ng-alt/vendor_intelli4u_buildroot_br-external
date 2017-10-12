@@ -11,11 +11,11 @@
 # either version 2.1 of the License, or (at your option) any
 # later version.
 
-AVAHI_VERSION = 0.6.32
 AVAHI_SITE = https://github.com/lathiat/avahi/releases/download/v$(AVAHI_VERSION)
 AVAHI_LICENSE = LGPL-2.1+
 AVAHI_LICENSE_FILES = LICENSE
 AVAHI_INSTALL_STAGING = YES
+AVAHI_AUTOGEN = YES
 
 AVAHI_CONF_ENV = \
 	ac_cv_func_strtod=yes \
@@ -79,6 +79,8 @@ AVAHI_CONF_ENV = \
 # programs, we decided to disable their support to solve the circular
 # dependency.
 AVAHI_CONF_OPTS = \
+	--disable-dbm \
+	--enable-gdbm \
 	--disable-qt3 \
 	--disable-qt4 \
 	--disable-gtk \
@@ -87,27 +89,31 @@ AVAHI_CONF_OPTS = \
 	--disable-pygtk \
 	--disable-mono \
 	--disable-monodoc \
+	--disable-doxygen-dot \
 	--disable-stack-protector \
 	--with-distro=none \
 	--disable-manpages \
+	--disable-doxygen-man \
+	--disable-doxygen-rtf \
+	--disable-doxygen-xml \
+	--disable-doxygen-chm \
+	--disable-doxygen-chi \
+	--disable-doxygen-html \
+	--disable-doxygen-ps \
+	--disable-doxygen-pdf \
+	--disable-xmltoman \
 	$(if $(BR2_PACKAGE_AVAHI_AUTOIPD),--enable,--disable)-autoipd \
-	--with-avahi-user=avahi \
-	--with-avahi-group=avahi \
-	--with-autoipd-user=avahi \
-	--with-autoipd-group=avahi
+	--with-avahi-user=root \
+	--with-avahi-group=root \
+	--with-autoipd-user=root \
+	--with-autoipd-group=root \
+	--disable-stack-protector
 
 AVAHI_DEPENDENCIES = \
 	host-intltool host-pkgconf \
 	$(TARGET_NLS_DEPENDENCIES)
 
 AVAHI_CFLAGS = $(TARGET_CFLAGS)
-
-ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-AVAHI_CONF_OPTS += --with-systemdsystemunitdir=/usr/lib/systemd/system
-else
-AVAHI_CONF_OPTS += --with-systemdsystemunitdir=no
-AVAHI_CFLAGS += -DDISABLE_SYSTEMD
-endif
 
 ifneq ($(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_AVAHI_AUTOIPD),)
 AVAHI_DEPENDENCIES += libdaemon
@@ -155,7 +161,7 @@ AVAHI_CONF_ENV += \
 AVAHI_DEPENDENCIES += python
 AVAHI_CONF_OPTS += --enable-python
 else
-AVAHI_CONF_OPTS += --disable-python
+AVAHI_CONF_OPTS += --disable-python --disable-pygtk --disable-python-dbus
 endif
 
 ifeq ($(BR2_PACKAGE_DBUS_PYTHON),y)
@@ -170,16 +176,6 @@ AVAHI_CONF_ENV += CFLAGS="$(AVAHI_CFLAGS)"
 
 AVAHI_MAKE_OPTS += LIBS=$(TARGET_NLS_LIBS)
 
-define AVAHI_USERS
-	avahi -1 avahi -1 * - - -
-endef
-
-define AVAHI_REMOVE_INITSCRIPT
-	rm -rf $(TARGET_DIR)/etc/init.d/avahi-*
-endef
-
-AVAHI_POST_INSTALL_TARGET_HOOKS += AVAHI_REMOVE_INITSCRIPT
-
 ifeq ($(BR2_PACKAGE_AVAHI_AUTOIPD),y)
 define AVAHI_INSTALL_AUTOIPD
 	rm -f $(TARGET_DIR)/var/lib/avahi-autoipd
@@ -187,38 +183,8 @@ define AVAHI_INSTALL_AUTOIPD
 	ln -sf /tmp/avahi-autoipd $(TARGET_DIR)/var/lib/avahi-autoipd
 endef
 
-define AVAHI_INSTALL_AUTOIPD_INIT_SYSV
-	$(INSTALL) -D -m 0755 package/avahi/S05avahi-setup.sh $(TARGET_DIR)/etc/init.d/S05avahi-setup.sh
-endef
-
 AVAHI_POST_INSTALL_TARGET_HOOKS += AVAHI_INSTALL_AUTOIPD
 endif
-
-ifeq ($(BR2_PACKAGE_AVAHI_DAEMON),y)
-
-define AVAHI_INSTALL_INIT_SYSTEMD
-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-
-	ln -fs ../../../../usr/lib/systemd/system/avahi-daemon.service \
-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/avahi-daemon.service
-
-	ln -fs ../../../../usr/lib/systemd/system/avahi-dnsconfd.service \
-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/avahi-dnsconfd.service
-
-	$(INSTALL) -D -m 644 package/avahi/avahi_tmpfiles.conf \
-		$(TARGET_DIR)/usr/lib/tmpfiles.d/avahi.conf
-endef
-
-define AVAHI_INSTALL_DAEMON_INIT_SYSV
-	$(INSTALL) -D -m 0755 package/avahi/S50avahi-daemon $(TARGET_DIR)/etc/init.d/S50avahi-daemon
-endef
-
-endif
-
-define AVAHI_INSTALL_INIT_SYSV
-	$(AVAHI_INSTALL_AUTOIPD_INIT_SYSV)
-	$(AVAHI_INSTALL_DAEMON_INIT_SYSV)
-endef
 
 ifeq ($(BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY),y)
 # applications expects to be able to #include <dns_sd.h>
