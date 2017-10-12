@@ -40,6 +40,7 @@ menu "Crypto"
 endmenu
 
 menu "Database"
+	source "package/berkeleydb/Config.in"
 	source "package/sqlite/Config.in"
 endmenu
 
