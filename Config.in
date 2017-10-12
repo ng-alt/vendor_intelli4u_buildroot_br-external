@@ -97,6 +97,11 @@ menu "Networking applications"
 	source "package/zeroconf/Config.in"
 endmenu
 
+menu "Shell and utilities"
+comment "Utilities"
+	source "package/easy-rsa/Config.in"
+endmenu
+
 menu "Router Core"
 	source "package/router/Config.in"
 endmenu
