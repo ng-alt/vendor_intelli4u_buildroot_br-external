@@ -28,6 +28,7 @@ endmenu
 
 menu "Filesystem and flash utilities"
 	source "package/cramfs/Config.in"
+	source "package/mtools/Config.in"
 	source "package/squashfs/Config.in"
 endmenu
 
