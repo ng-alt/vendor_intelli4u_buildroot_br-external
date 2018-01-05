@@ -1,0 +1,16 @@
+config BR2_PACKAGE_L7PROTOCOLS
+	bool "l7protocols"
+	help
+	  There are patterns (protocol definitions) for the Linux layer 7
+	  packet classifier (l7-filter).
+
+	  http://sf.net/projects/l7-filter/
+
+if BR2_PACKAGE_L7PROTOCOLS
+
+config BR2_TARGET_L7PROTOCOLS_PATH
+	string "l7protocols target path"
+	default "etc/l7-protocols"
+
+endif
+
