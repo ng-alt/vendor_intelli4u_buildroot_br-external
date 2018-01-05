@@ -102,6 +102,7 @@ menu "Text and terminal handling"
 endmenu
 
 menu "Networking applications"
+	source "package/6relayd/Config.in"
 	source "package/avahi/Config.in"
 	source "package/bftpd/Config.in"
 	source "package/bridge-utils/Config.in"
