@@ -80,6 +80,7 @@ menu "Multimedia"
 endmenu
 
 menu "Networking"
+	source "package/comgt/Config.in"
 	source "package/geoip/Config.in"
 	source "package/libcurl/Config.in"
 	source "package/libmnl/Config.in"
