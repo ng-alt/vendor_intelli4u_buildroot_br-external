@@ -209,7 +209,8 @@ function clean_files {
   remove_with_find -type f \( -name '*.a' -o -name '*.la' \)
 
   #- clean up kernel modules.*
-  remove_with_find -type f -name 'modules.*'
+  remove_with_find -type f \( \( -name 'modules*' \) -a \
+    -not \( -name modules.dep -o -name modules.builtin -o -name modules.order \) \)
 
   #- clean up .msg, .pc and .m4
   remove_with_find -type f \( -name '*.msg' -o -name '*.m4' -o -name '*.pc' \)
