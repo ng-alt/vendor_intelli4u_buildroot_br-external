@@ -91,6 +91,9 @@ function clean_files {
   #- alsa-lib
   remove /usr/bin/aserver
 
+  #- berkeleydb
+  remove /usr/bin/db_sql
+
   #- busybox
   # remove /etc/inittab
 
