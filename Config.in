@@ -95,6 +95,7 @@ menu "Other"
 	source "package/libev/Config.in"
 	source "package/libevent/Config.in"
 	source "package/openpam/Config.in"
+	source "package/portmap/Config.in"
 	source "package/libubox/Config.in"
 endmenu
 
