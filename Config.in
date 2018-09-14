@@ -94,6 +94,7 @@ menu "Other"
 	source "package/libdaemon/Config.in"
 	source "package/libev/Config.in"
 	source "package/libevent/Config.in"
+	source "package/openpam/Config.in"
 	source "package/libubox/Config.in"
 endmenu
 
