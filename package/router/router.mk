@@ -72,4 +72,4 @@ $(error No router configuration file specified, check your BR2_PACKAGE_ROUTER_CO
 endif
 endif
 
-$(eval $(kconfig-package))
+$(eval $(generic-package))
