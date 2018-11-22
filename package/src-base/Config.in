@@ -1,0 +1,7 @@
+config BR2_PACKAGE_SRC_BASE
+	bool "src-base"
+	help
+	  Vendor router src base directory excluding router directory.
+
+	  It provides the extra files like Makefile, router components.
+

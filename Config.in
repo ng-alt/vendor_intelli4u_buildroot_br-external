@@ -159,7 +159,8 @@ menu "Text editors and viewers"
 	source "package/nano/Config.in"
 endmenu
 
-menu "Router Core"
+menu "Router"
+	source "package/src-base/Config.in"
 	source "package/router/Config.in"
 endmenu
 
