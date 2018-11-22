@@ -5,8 +5,7 @@
 ################################################################################
 
 IGMPPROXY_SITE = http://github/pali/igmpproxy
-IGMPPROXY_AUTOGEN = YES
-IGMPPROXY_AUTOGEN_SCRIPT = bootstrap
+IGMPPROXY_AUTORECONF = YES
 IGMPPROXY_LICENSE = GPL-2.0+
 IGMPPROXY_LICENSE_FILES = COPYING
 
