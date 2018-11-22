@@ -72,6 +72,7 @@ define ROUTER_INSTALL_TARGET_CMDS
 	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) \
 		$(ROUTER_MAKE_OPTS) INSTALLFLAGS=-m755 install
 	rsync -au $(@D)/arm-uclibc/target $(BASE_DIR)
+	cd $(@D)/compressed && $(TARGET_CONFIGURE_OPTS) $(MAKE1) $(ROUTER_MAKE_OPTS) all && cp vmlinuz $(BINARIES_DIR)/
 endef
 
 ifeq ($(BR2_PACKAGE_ROUTER),y)
