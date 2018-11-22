@@ -1,0 +1,13 @@
+config BR2_PACKAGE_LIBSMBCLIENT
+	bool "samba"
+	depends on BR2_TOOLCHAIN_HAS_THREADS
+	depends on BR2_USE_MMU # fork()
+	depends on !BR2_nios2 # binary too large, relocations don't fit
+	select BR2_PACKAGE_POPT
+	help
+	  Base on samba source to build libsmbclient library
+
+	  http://www.samba.org/
+
+	  NOTE: A complete Samba install takes over 50MB of space,
+		so choose only the components you need.
