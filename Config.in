@@ -88,6 +88,7 @@ menu "Networking"
 	source "package/libnfnetlink/Config.in"
 	source "package/libpcap/Config.in"
 	source "package/l7protocols/Config.in"
+	source "package/miniupnp/Config.in"
 	source "package/neon/Config.in"
 endmenu
 
