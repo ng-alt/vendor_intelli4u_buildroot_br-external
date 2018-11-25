@@ -25,7 +25,9 @@ MINIDLNA_CONF_OPTS = \
 	--disable-static
 
 define MINIDLNA_INSTALL_CONF
-	$(INSTALL) -D -m 644 $(@D)/minidlna.conf $(TARGET_DIR)/etc/minidlna.conf
+# refer to original Makefile
+#	$(INSTALL) -D -m 644 $(@D)/minidlna.conf $(TARGET_DIR)/etc/minidlna.conf
+	$(INSTALL) -m 0644 $(@D)/minidlna.conf $(TARGET_DIR)/usr/minidlna.conf
 endef
 
 MINIDLNA_POST_INSTALL_TARGET_HOOKS += MINIDLNA_INSTALL_CONF
