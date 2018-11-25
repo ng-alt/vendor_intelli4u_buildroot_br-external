@@ -49,8 +49,10 @@ OPENVPN_CONF_OPTS += --disable-lzo
 endif
 
 define OPENVPN_INSTALL_TARGET_CMDS
-	$(INSTALL) -m 755 $(@D)/src/openvpn/openvpn \
-		$(TARGET_DIR)/usr/sbin/openvpn
+	$(INSTALL) -d $(TARGET_DIR)/usr/local/sbin
+	$(INSTALL) -m 755 $(@D)/src/openvpn/openvpn $(TARGET_DIR)/usr/local/sbin/openvpn
+	$(INSTALL) -d $(TARGET_DIR)/usr/local/share/foxconn_ca
+	$(INSTALL) -m 755 $(@D)/foxconn_ca/* $(TARGET_DIR)/usr/local/share/foxconn_ca
 endef
 
 $(eval $(autotools-package))
