@@ -197,7 +197,14 @@ SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_REMOVE_SWAT_DOCUMENTATION
 endif
 
 define SAMBA_INSTALL_CONFIG
-	$(INSTALL) -m 0644 -D $(BR2_EXTERNAL_NETGEAR_PATH)/package/samba/simple.conf $(TARGET_DIR)/etc/samba/smb.conf
+	$(INSTALL) -d $(TARGET_DIR)/usr/local/samba/lib
+	$(INSTALL) -m 0644 $(@D)/data/group $(TARGET_DIR)/etc
+	$(INSTALL) -m 0644 $(@D)/data/lmhosts $(TARGET_DIR)/usr/local/samba/lib
+	ln -sf ../../../tmp/smaba/private $(TARGET_DIR)/usr/local/samba/private
+	ln -sf ../../../var $(TARGET_DIR)/usr/local/samba/var
+	ln -sf ../../../var/lock $(TARGET_DIR)/usr/local/samba/lock
+	ln -sf ../../../tmp/samba/private/smb.conf $(TARGET_DIR)/usr/local/samba/lib/smb.conf
+	rm -f $(TARGET_DIR)/etc/passwd && ln -sf ../tmp/samba/private/passwd $(TARGET_DIR)/etc/passwd
 endef
 
 SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_CONFIG
