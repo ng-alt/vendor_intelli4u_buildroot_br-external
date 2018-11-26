@@ -273,7 +273,7 @@ config BR2_PACKAGE_SAMBA_AVAHI
 	default y
 	depends on BR2_PACKAGE_AVAHI_DAEMON
 	depends on BR2_USE_MMU # dbus
-	select BR2_PACKAGE_DBUS
+#	select BR2_PACKAGE_DBUS
 	help
 	  Include support for avahi
 
