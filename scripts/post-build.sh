@@ -192,6 +192,9 @@ function clean_files {
   #- wx
   remove_force /usr/lib/wx /usr/share/bakefile/presets
 
+  #- zebra
+  remove /etc/ripd.conf.sample /etc/zebra.conf.sample
+
   #------------------------------------------------------------------
   #- remove specified directories
   remove_force /usr/include /usr/aclocal /usr/doc /share/info /usr/share/terminfo
