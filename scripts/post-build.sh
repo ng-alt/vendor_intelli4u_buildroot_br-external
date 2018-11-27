@@ -165,7 +165,7 @@ function clean_files {
   remove /usr/sbin/lighttd-angel
 
   #- openssl
-  remove_force /etc/ssl /usr/bin/openssl
+  remove_force /etc/ssl
 
   #- pcre
   remove /usr/bin/pcregrep /usr/bin/pcretest
