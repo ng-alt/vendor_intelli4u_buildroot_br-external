@@ -34,6 +34,7 @@ endmenu
 
 menu "Hardware handling"
 	source "package/hdparm/Config.in"
+	source "package/hub-ctrl/Config.in"
 	source "package/sdparm/Config.in"
 	source "package/usb_modeswitch/Config.in"
 endmenu

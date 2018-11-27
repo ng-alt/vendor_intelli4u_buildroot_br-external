@@ -1,0 +1,4 @@
+config BR2_PACKAGE_HUB_CTRL
+	bool "hub-ctrl"
+	help
+	  program to control port power/led of USB hub
