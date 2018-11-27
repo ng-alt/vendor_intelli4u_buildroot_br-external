@@ -1,0 +1,13 @@
+config BR2_PACKAGE_FORKED_DAAPD
+	bool "forked-daapd"
+	help
+	  forked-daapd is a DAAP and RSP media server, whith support
+	  for Linux and FreeBSD. It is a complete rewrite of mt-daapd
+	  (Firefly Media Server).
+
+	  DAAP stands for Digital Audio Access Protocol, and is the
+	  protocol used by iTunes and friends to share/stream media
+	  libraries over network.
+
+	  RSP is Roku's own media sharing protocol. Roku are the marks
+	  of the SoundBridge devices. See <http://www.roku.com>.
