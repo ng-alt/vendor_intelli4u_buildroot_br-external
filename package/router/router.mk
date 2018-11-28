@@ -62,10 +62,18 @@ define ROUTER_ALL_MAKEFILES_INCLUDE_SUPPRESS_SUBROUTINE
 	find $(@D) -name 'Makefile' -exec $(SED) '/^include\s\+.*config\./ { s|include \(..\/\)\{1,\}|include $(BR2_EXTERNAL_NETGEAR_PATH)/package/router/src\/|g }' {} \;
 endef
 
+ROUTER_PJPROJECT_CONFIGURE = asusnatnl/pjproject-1.12/configure-router-arm
+define ROUTER_FIX_ASUSNATL_PJPROJECT_CONFIGURE
+	if [ -e $(@D)/$(ROUTER_PJPROJECT_CONFIGURE) ] ; then \
+		$(SED) "s,OPENSSL_LDLIBS=\"-lssl,OPENSSL_LDLIBS=\"-L$$TARGET_DIR/usr/lib -lssl," \
+			-e "/OPENSSL_DIR=/D" $(@D)/$(ROUTER_PJPROJECT_CONFIGURE); \
+	fi
+endef
+ROUTER_PRE_BUILD_HOOKS += ROUTER_FIX_ASUSNATL_PJPROJECT_CONFIGURE
+
 define ROUTER_BUILD_CMDS
 	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) \
-		HOST=_LINUX CC="$(TARGET_CC)" AR="$(TARGET_AR)" STRIP="$(TARGET_STRIP)" \
-		$(ROUTER_MAKE_OPTS) all
+		HOST=_LINUX $(ROUTER_MAKE_OPTS) all
 endef
 
 define ROUTER_INSTALL_TARGET_CMDS
