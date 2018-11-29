@@ -4,12 +4,9 @@
 #
 ################################################################################
 
-# refer to merlin version
 SRC_BASE_REF_DIR = $(BR2_TOPDIR)vendor/asus/base
-SRC_BASE_VERSION_FILE = $(SRC_BASE_REF_DIR)/version.conf
-SRC_BASE_VERSION_PATTERN = "SERIALNO\s*=\s*(.+)"
-SRC_BASE_LICENSE = GPL-2.0
-SRC_BASE_LICENSE_FILES = LICENSE
+SRC_BASE_VERSION_FILE = $(BR2_TOPDIR)vendor/netgear/acos/include/ambitCfg.h
+SRC_BASE_VERSION_PATTERN = "\#\s*define\s+AMBIT_SOFTWARE_VERSION\s+\"([^\"]+)\""
 
 SRC_BASE_MAKE = $(MAKE1)
 

@@ -4,8 +4,9 @@
 #
 ################################################################################
 
-ROUTER_VERSION_FILE = $(BR2_TOPDIR)vendor/netgear/acos/include/ambitCfg.h
-ROUTER_VERSION_PATTERN = "\#\s*define\s+AMBIT_SOFTWARE_VERSION\s+\"([^\"]+)\""
+# refer to merlin version
+ROUTER_VERSION_FILE = $(BR2_TOPDIR)vendor/asus/base/version.conf
+ROUTER_VERSION_PATTERN = "SERIALNO\s*=\s*(.+)"
 ROUTER_SITE = https://www.downloads.netgear.com/files/GPL
 ROUTER_SOURCE = R6300v2-$(ROUTER_VERSION)_src.tar.zip
 ROUTER_LICENSE = GPL-2.0

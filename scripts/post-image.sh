@@ -5,7 +5,7 @@ TMP_DIR=tmp.$$
 
 MERL_CONF=$BR2_TOPDIR/vendor/asus/base/version.conf
 
-BASE_VERSION=$(ls -d $BR2_OUTDIR/build/router-V* | grep -o -P '/router-.*' | sed -n 's,/router-V\(.*\),\1,p')
+BASE_VERSION=$(ls -d $BR2_OUTDIR/build/src-base-V* | grep -o -P 'base-.*' | sed -n 's,base-V\(.*\),\1,p')
 if [ -e "$MERL_CONF" ] ; then
   MERLIN_VERSION=$(grep -o -P 'SERIALNO=.*' $MERL_CONF | sed -n 's,SERIALNO=\(.*\),\1,p')
 fi
