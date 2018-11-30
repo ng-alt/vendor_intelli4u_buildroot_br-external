@@ -44,11 +44,11 @@ ROUTER_DEPENDENCIES += $(if $(BR2_PACKAGE_SQLITE), sqlite)
 ROUTER_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB), zlib)
 
 define ROUTER_MAKEFILE_INCLUDE_SUPPRESS_SUBROUTINE
-	$(SED) '/^include\s\+.*config/ { s|include \(..\/\)\{1,\}|include $(BR2_EXTERNAL_NETGEAR_PATH)/package/router/src\/|g }' $(if $(1),$(1),$(@D)/Makefile)
+	$(SED) '/^include\s\+[$$\.].\+\/config\./ { s|include\s\+.\+/config\.|include $(BR2_EXTERNAL_NETGEAR_PATH)/package/router/src/config.|g }' $(if $(1),$(1),$(@D)/Makefile)
 endef
 
 define ROUTER_ALL_MAKEFILES_INCLUDE_SUPPRESS_SUBROUTINE
-	find $(@D) -name 'Makefile' -exec $(SED) '/^include\s\+.*config\./ { s|include \(..\/\)\{1,\}|include $(BR2_EXTERNAL_NETGEAR_PATH)/package/router/src\/|g }' {} \;
+	find $(@D) -name 'Makefile' -exec $(SED) '/^include\s\+[$$\.].\+\/config\./ { s|include\s\+.\+/config\.|include $(BR2_EXTERNAL_NETGEAR_PATH)/package/router/src/config.|g }' {} \;
 endef
 
 define ROUTER_BUILD_CMDS
