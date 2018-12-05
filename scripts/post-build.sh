@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TARGET_DIR=${BR2_OUTDIR}/target
+TARGET_DIR=$BR2_OUTDIR/target
 
 STRIPCMD="`ls $BR2_OUTDIR/host/bin/*-strip` --remove-section=.comment --remove-section=.note --strip-debug"
 
@@ -109,7 +109,7 @@ function clean_files {
 
   #- e2fsprog
   remove /bin/chattr /bin/lsattr /bin/uuidgen
-  
+
   #- ffmpeg
   remove /usr/bin/ffmpeg
   remove_force /usr/share/ffmpeg/examples
@@ -175,7 +175,7 @@ function clean_files {
 
   #- router
   remove_force /rom/cfe
-  
+
   #- sqlite
   remove /usr/bin/sqlite3
 
@@ -221,7 +221,26 @@ function clean_files {
   done
 }
 
+function update_kobjs {
+  # follow asus-merlin router/Makefile to shorten ko paths
+  mv -f $TARGET_DIR/lib/modules/*/kernel/drivers/net/{bcm57xx,bonding,ctf,ctf_5358,et,et.4702,emf,igs,wl}/*.ko $TARGET_DIR/lib/modules/*/kernel/drivers/net/ 2>/dev/null
+  mv -f $TARGET_DIR/lib/modules/*/kernel/drivers/net/wl/{wl_high,wl_sta}/wl_high.ko $TARGET_DIR/lib/modules/*/kernel/drivers/net/ 2>/dev/null
+  mv -f $TARGET_DIR/lib/modules/*/kernel/drivers/usb/{hcd,host,storage,serial,core,class,misc}/*.ko $TARGET_DIR/lib/modules/*/kernel/drivers/usb/ 2>/dev/null
+
+  mv -f $TARGET_DIR/lib/modules/*/kernel/fs/{cifs,exportfs,ext2,ext3,ext4,fat,fuse,hfsplus,jbd,jbd2,jffs,jffs2,lockd,msdos,nfs,nfsd,nls,ntfs,smbfs,reiserfs,vfat,xfs}/*.ko $TARGET_DIR/lib/modules/*/kernel/fs/ 2>/dev/null
+  mv -f $TARGET_DIR/lib/modules/*/kernel/lib/{zlib_inflate,zlib_deflate,lzo}/*.ko $TARGET_DIR/lib/modules/*/kernel/lib 2>/dev/null
+  mv -f $TARGET_DIR/lib/modules/*/kernel/net/{sunrpc,sunrpc/auth_gss}/*.ko $TARGET_DIR/lib/modules/*/kernel/net/ 2>/dev/null
+
+  # execute to remove dirs twice (two-level directory movement)
+  find $TARGET_DIR/lib/modules/*/kernel/ -type d -exec rmdir {} \; 2>/dev/null
+  find $TARGET_DIR/lib/modules/*/kernel/ -type d -exec rmdir {} \; 2>/dev/null
+
+  $BR2_TOPDIR/external/busybox/examples/depmod.pl -k $BR2_OUTDIR/build/linux*/vmlinux -b $TARGET_DIR/lib/modules/*/
+}
+
 #- MAIN
+update_kobjs
+
 strip_exec
 clean_files
 
