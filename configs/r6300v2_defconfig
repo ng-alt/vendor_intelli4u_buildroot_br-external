@@ -161,14 +161,8 @@ BR2_PACKAGE_UDEV=y
 #
 # Interpreter languages and scripting
 #
-BR2_PACKAGE_LUA=y
-# BR2_PACKAGE_LUA_5_1 is not set
-# BR2_PACKAGE_LUA_5_2 is not set
-BR2_PACKAGE_LUA_5_3=y
-BR2_PACKAGE_LUA_32BITS=y
-BR2_PACKAGE_LUA_EDITING_NONE=y
-# BR2_PACKAGE_LUA_READLINE is not set
-# BR2_PACKAGE_LUA_LINENOISE is not set
+# BR2_PACKAGE_LUA is not set
+BR2_PACKAGE_PYTHON=y
 
 #
 # JSON/XML
@@ -246,56 +240,7 @@ BR2_PACKAGE_PPPD=y
 BR2_PACKAGE_PPPOECD=y
 BR2_PACKAGE_PPTP=y
 BR2_PACKAGE_RADVD=y
-BR2_PACKAGE_SAMBA=y
-BR2_PACKAGE_SAMBA_MAX_DEBUGLEVEL=-1
-# BR2_PACKAGE_SAMBA_LIBICONV is not set
-
-#
-# Samba tools selection
-#
-# BR2_PACKAGE_SAMBA_EVENTLOGADM is not set
-
-#
-# findsmb       - disabled (requires nmblookup, smbclient and perl)
-#
-# BR2_PACKAGE_SAMBA_NET is not set
-BR2_PACKAGE_SAMBA_NMBD=y
-# BR2_PACKAGE_SAMBA_NMBLOOKUP is not set
-# BR2_PACKAGE_SAMBA_NTLM_AUTH is not set
-# BR2_PACKAGE_SAMBA_PDBEDIT is not set
-# BR2_PACKAGE_SAMBA_PROFILES is not set
-# BR2_PACKAGE_SAMBA_RPCCLIENT is not set
-# BR2_PACKAGE_SAMBA_SMBCACLS is not set
-# BR2_PACKAGE_SAMBA_SMBCLIENT is not set
-# BR2_PACKAGE_SAMBA_SMBCONTROL is not set
-# BR2_PACKAGE_SAMBA_SMBCQUOTAS is not set
-BR2_PACKAGE_SAMBA_SMBD=y
-# BR2_PACKAGE_SAMBA_SMBGET is not set
-# BR2_PACKAGE_SAMBA_SMBLDBTOOLS is not set
-BR2_PACKAGE_SAMBA_SMBPASSWD=y
-# BR2_PACKAGE_SAMBA_SMBSHARESEC is not set
-# BR2_PACKAGE_SAMBA_SMBSPOOL is not set
-# BR2_PACKAGE_SAMBA_SMBSTATUS is not set
-# BR2_PACKAGE_SAMBA_SMBTREE is not set
-# BR2_PACKAGE_SAMBA_SWAT is not set
-# BR2_PACKAGE_SAMBA_SMBTA_UTIL is not set
-
-#
-# smbtar        - disabled (requires smbclient)
-#
-# BR2_PACKAGE_SAMBA_TDB is not set
-# BR2_PACKAGE_SAMBA_TESTPARM is not set
-# BR2_PACKAGE_SAMBA_WINBINDD is not set
-# BR2_PACKAGE_SAMBA_CIFS_MOUNT is not set
-
-#
-# Samba libraries selection
-#
-# BR2_PACKAGE_SAMBA_LIBSMBCLIENT is not set
-
-#
-# Samba support selection
-#
+BR2_PACKAGE_SAMBA4=y
 
 #
 # support avahi - disabled (requires avahi-daemon)
