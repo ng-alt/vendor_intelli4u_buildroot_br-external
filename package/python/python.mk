@@ -4,61 +4,12 @@
 #
 ################################################################################
 
-PYTHON_VERSION_MAJOR = 2.7
-PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).14
-PYTHON_SOURCE = Python-$(PYTHON_VERSION).tar.xz
-PYTHON_SITE = https://python.org/ftp/python/$(PYTHON_VERSION)
+PYTHON_SITE = https://python.org/ftp/python
 PYTHON_LICENSE = Python-2.0, others
 PYTHON_LICENSE_FILES = LICENSE
 PYTHON_LIBTOOL_PATCH = NO
 
-# Python needs itself to be built, so in order to cross-compile
-# Python, we need to build a host Python first. This host Python is
-# also installed in $(HOST_DIR), as it is needed when cross-compiling
-# third-party Python modules.
-
-HOST_PYTHON_CONF_OPTS += \
-	--enable-static \
-	--without-cxx-main \
-	--disable-sqlite3 \
-	--disable-tk \
-	--with-expat=system \
-	--disable-curses \
-	--disable-codecs-cjk \
-	--disable-nis \
-	--enable-unicodedata \
-	--disable-dbm \
-	--disable-gdbm \
-	--disable-bsddb \
-	--disable-test-modules \
-	--disable-bz2 \
-	--disable-ssl \
-	--disable-ossaudiodev \
-	--disable-pyo-build
-
-# Make sure that LD_LIBRARY_PATH overrides -rpath.
-# This is needed because libpython may be installed at the same time that
-# python is called.
-# Make python believe we don't have 'hg' and 'svn', so that it doesn't
-# try to communicate over the network during the build.
-HOST_PYTHON_CONF_ENV += \
-	LDFLAGS="$(HOST_LDFLAGS) -Wl,--enable-new-dtags" \
-	ac_cv_prog_HAS_HG=/bin/false \
-	ac_cv_prog_SVNVERSION=/bin/false
-
-# Building host python in parallel sometimes triggers a "Bus error"
-# during the execution of "./python setup.py build" in the
-# installation step. It is probably due to the installation of a
-# shared library taking place in parallel to the execution of
-# ./python, causing spurious Bus error. Building host-python with
-# MAKE1 has shown to workaround the problem.
-HOST_PYTHON_MAKE = $(MAKE1)
-
-PYTHON_DEPENDENCIES = host-python libffi $(TARGET_NLS_DEPENDENCIES)
-
-HOST_PYTHON_DEPENDENCIES = host-expat host-zlib
-
-PYTHON_INSTALL_STAGING = YES
+PYTHON_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
 
 ifeq ($(BR2_PACKAGE_PYTHON_READLINE),y)
 PYTHON_DEPENDENCIES += readline
@@ -107,9 +58,6 @@ endif
 
 # Default is UCS2 w/o a conf opt
 ifeq ($(BR2_PACKAGE_PYTHON_UCS4),y)
-# host-python must have the same UCS2/4 configuration as the target
-# python
-HOST_PYTHON_CONF_OPTS += --enable-unicode=ucs4
 PYTHON_CONF_OPTS += --enable-unicode=ucs4
 endif
 
@@ -222,42 +170,20 @@ PYTHON_POST_INSTALL_STAGING_HOOKS += PYTHON_INSTALL_STAGING_PYTHON_CONFIG_SYMLIN
 
 PYTHON_AUTORECONF = YES
 
-# Some packages may have build scripts requiring python2.
-# Only install the python symlink in the host tree if python3 is not enabled
-# for the target, otherwise the default python program may be missing.
-ifneq ($(BR2_PACKAGE_PYTHON3),y)
-define HOST_PYTHON_INSTALL_PYTHON_SYMLINK
-	ln -sf python2 $(HOST_DIR)/bin/python
-	ln -sf python2-config $(HOST_DIR)/bin/python-config
-endef
-
-HOST_PYTHON_POST_INSTALL_HOOKS += HOST_PYTHON_INSTALL_PYTHON_SYMLINK
-endif
-
 # Provided to other packages
 PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/
 
+# It's dependent by samba4, don't install python to target actually
+PYTHON_INSTALL_STAGING = YES
+PYTHON_INSTALL_TARGET = NO
+
 $(eval $(autotools-package))
-$(eval $(host-autotools-package))
 
 ifeq ($(BR2_REPRODUCIBLE),y)
 define PYTHON_FIX_TIME
 	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
 		xargs -0 --no-run-if-empty touch -d @$(SOURCE_DATE_EPOCH)
 endef
-endif
-
-define PYTHON_CREATE_PYC_FILES
-	$(PYTHON_FIX_TIME)
-	PYTHONPATH="$(PYTHON_PATH)" \
-	cd $(TARGET_DIR) && $(HOST_DIR)/bin/python$(PYTHON_VERSION_MAJOR) \
-		$(TOPDIR)/support/scripts/pycompile.py \
-		$(if $(BR2_REPRODUCIBLE),--force) \
-		usr/lib/python$(PYTHON_VERSION_MAJOR)
-endef
-
-ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY)$(BR2_PACKAGE_PYTHON_PY_PYC),y)
-PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_CREATE_PYC_FILES
 endif
 
 ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
