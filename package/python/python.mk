@@ -126,41 +126,6 @@ endef
 
 PYTHON_POST_PATCH_HOOKS += PYTHON_TOUCH_GRAMMAR_FILES
 
-#
-# Remove useless files. In the config/ directory, only the Makefile
-# and the pyconfig.h files are needed at runtime.
-#
-# idle & smtpd.py have bad shebangs and are mostly samples
-#
-define PYTHON_REMOVE_USELESS_FILES
-	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR)-config
-	rm -f $(TARGET_DIR)/usr/bin/python2-config
-	rm -f $(TARGET_DIR)/usr/bin/python-config
-	rm -f $(TARGET_DIR)/usr/bin/smtpd.py
-	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/config/ \
-		-type f -not -name pyconfig.h -a -not -name Makefile` ; do \
-		rm -f $$i ; \
-	done
-endef
-
-PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_USELESS_FILES
-
-#
-# Make sure libpython gets stripped out on target
-#
-define PYTHON_ENSURE_LIBPYTHON_STRIPPED
-	chmod u+w $(TARGET_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR)*.so
-endef
-
-PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_ENSURE_LIBPYTHON_STRIPPED
-
-# Always install the python symlink in the target tree
-define PYTHON_INSTALL_TARGET_PYTHON_SYMLINK
-	ln -sf python2 $(TARGET_DIR)/usr/bin/python
-endef
-
-PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_INSTALL_TARGET_PYTHON_SYMLINK
-
 # Always install the python-config symlink in the staging tree
 define PYTHON_INSTALL_STAGING_PYTHON_CONFIG_SYMLINK
 	ln -sf python2-config $(STAGING_DIR)/usr/bin/python-config
@@ -170,43 +135,12 @@ PYTHON_POST_INSTALL_STAGING_HOOKS += PYTHON_INSTALL_STAGING_PYTHON_CONFIG_SYMLIN
 
 PYTHON_AUTORECONF = YES
 
-# Provided to other packages
-PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/
-
-# It's dependent by samba4, don't install python to target actually
+# It's dependent only by samba4, don't install python actually
 PYTHON_INSTALL_STAGING = YES
 PYTHON_INSTALL_TARGET = NO
 
+define PYTHON_INSTALL_STAGING_CMDS
+	@true
+endef
+
 $(eval $(autotools-package))
-
-ifeq ($(BR2_REPRODUCIBLE),y)
-define PYTHON_FIX_TIME
-	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
-		xargs -0 --no-run-if-empty touch -d @$(SOURCE_DATE_EPOCH)
-endef
-endif
-
-ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
-define PYTHON_REMOVE_PY_FILES
-	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
-		xargs -0 --no-run-if-empty rm -f
-endef
-PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PY_FILES
-endif
-
-# Normally, *.pyc files should not have been compiled, but just in
-# case, we make sure we remove all of them.
-ifeq ($(BR2_PACKAGE_PYTHON_PY_ONLY),y)
-define PYTHON_REMOVE_PYC_FILES
-	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyc' -print0 | \
-		xargs -0 --no-run-if-empty rm -f
-endef
-PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYC_FILES
-endif
-
-# In all cases, we don't want to keep the optimized .pyo files
-define PYTHON_REMOVE_PYO_FILES
-	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyo' -print0 | \
-		xargs -0 --no-run-if-empty rm -f
-endef
-PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYO_FILES
