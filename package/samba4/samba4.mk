@@ -88,13 +88,12 @@ define SAMBA4_CONFIGURE_CMDS
 	$(INSTALL) -m 0644 $(BR2_EXTERNAL_NETGEAR_PATH)/package/samba4/samba4-cache.txt $(@D)/cache.txt;
 	echo 'Checking uname machine type: $(BR2_ARCH)' >> $(@D)/cache.txt;
 	(cd $(@D); \
-		PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python-config" \
 		$(TARGET_CONFIGURE_OPTS) \
 		$(SAMBA4_CONF_ENV) \
-		python_LDFLAGS=-L$(PYTHON_DIR)/lib \
+		python_LDFLAGS=-L$(@D)/lib \
 		python_LIBDIR=$(@D)/python_arm/lib \
-		CFLAGS=-"D_LARGE_FILES -D_FILE_OFFSET_BITS=64 -I$(STAGING_DIR)/usr/include/python2.7" \
-		LDFLAGS=-L$(@D)/python_arm/lib \
+		CFLAGS="-D_LARGE_FILES -D_FILE_OFFSET_BITS=64 -I$(PYTHON_DIR) -I$(PYTHON_DIR)/Include" \
+		LDFLAGS="-L$(PYTHON_DIR) -L$(@D)/python_arm/lib" \
 		./configure \
 			--prefix=/usr/local/samba \
 			--sysconfdir=/etc \
