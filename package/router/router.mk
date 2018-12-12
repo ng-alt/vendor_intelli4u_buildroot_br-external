@@ -82,6 +82,7 @@ define ROUTER_INSTALL_TARGET_CMDS
 		$(ROUTER_MAKE_OPTS) INSTALLFLAGS=-m755 install
 	rsync -au $(@D)/arm-uclibc/target $(BASE_DIR)
 	cd $(@D)/compressed && $(TARGET_CONFIGURE_OPTS) $(MAKE1) $(ROUTER_MAKE_OPTS) all && cp vmlinuz $(BINARIES_DIR)/
+	$(INSTALL) -D -m 0500 $(@D)/httpd/gencert.sh $(TARGET_DIR)/usr/sbin/gencert.sh
 endef
 
 ifeq ($(BR2_PACKAGE_ROUTER),y)
