@@ -44,7 +44,7 @@ BR2_arm=y
 # BR2_xtensa is not set
 BR2_ARCH="arm"
 BR2_ENDIAN="LITTLE"
-BR2_GCC_TARGET_ABI="arm-linux"
+BR2_GCC_TARGET_ABI="aapcs-linux"
 BR2_GCC_TARGET_CPU="cortex-a5"
 BR2_GCC_TARGET_FLOAT_ABI="soft"
 BR2_GCC_TARGET_MODE="arm"
@@ -357,6 +357,8 @@ BR2_LINUX_KERNEL_ZIMAGE=y
 # BR2_LINUX_KERNEL_XZ is not set
 # BR2_LINUX_KERNEL_DTS_SUPPORT is not set
 # BR2_LINUX_KERNEL_INSTALL_TARGET is not set
+# BR2_LINUX_DEPENDENCIES is not set
+# BR2_LINUX_MAKE_OPTS is not set
 
 #
 # Linux Kernel Extensions
@@ -375,25 +377,6 @@ BR2_LINUX_KERNEL_ZIMAGE=y
 # BR2_PACKAGE_LINUX_TOOLS_PERF is not set
 # BR2_PACKAGE_LINUX_TOOLS_SELFTESTS is not set
 # BR2_PACKAGE_LINUX_TOOLS_TMON is not set
-
-#
-# Target packages
-#
-# BR2_PACKAGE_PKGCONF is not set
-
-#
-# Interpreter languages and scripting
-#
-BR2_PACKAGE_HAS_LUAINTERPRETER=y
-BR2_PACKAGE_PROVIDES_LUAINTERPRETER="lua"
-BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION="5.3"
-
-#
-# System tools
-#
-# BR2_PACKAGE_ACL is not set
-# BR2_PACKAGE_ATTR is not set
-# BR2_PACKAGE_KMOD is not set
 
 #
 # Filesystem images
@@ -648,6 +631,7 @@ BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR=""
 # BR2_PACKAGE_PERF is not set
 # BR2_BINUTILS_VERSION_2_22 is not set
 # BR2_PACKAGE_GPU_VIV_BIN_MX6Q is not set
+# BR2_PACKAGE_LIBSEMANAGE_PYTHON_BINDINGS is not set
 # BR2_TARGET_UBOOT_NETWORK is not set
 
 #
@@ -860,7 +844,6 @@ BR2_EXTERNAL_NETGEAR_PATH=""
 #
 # Audio/Sound
 #
-# BR2_PACKAGE_ALSA_LIB is not set
 # BR2_PACKAGE_LIBID3TAG is not set
 # BR2_PACKAGE_LIBVORBIS is not set
 
@@ -870,7 +853,6 @@ BR2_EXTERNAL_NETGEAR_PATH=""
 # BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS is not set
 # BR2_PACKAGE_FFMPEG is not set
 # BR2_PACKAGE_FLAC is not set
-# BR2_PACKAGE_UDPXY is not set
 
 #
 # Compressors and decompressors
@@ -885,27 +867,11 @@ BR2_EXTERNAL_NETGEAR_PATH=""
 # BR2_PACKAGE_FLEX is not set
 
 #
-# gettext needs a toolchain w/ wchar
-#
-
-#
-# gperf needs a toolchain w/ C++
-#
-# BR2_PACKAGE_LIBAVL is not set
-
-#
 # Filesystem and flash utilities
 #
 # BR2_PACKAGE_CRAMFS is not set
-
-#
-# mtools needs a toolchain w/ wchar
-#
 # BR2_PACKAGE_E2FSPROGS is not set
 # BR2_PACKAGE_NFS_UTILS is not set
-#
-# ntfs-3g needs a toolchain w/ wchar, threads, dynamic library
-#
 # BR2_PACKAGE_SQUASHFS is not set
 
 #
@@ -918,164 +884,73 @@ BR2_EXTERNAL_NETGEAR_PATH=""
 #
 # Crypto
 #
-# BR2_PACKAGE_LIBCRYPTOXX is not set
-# BR2_PACKAGE_LIBGCRYPT is not set
-BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS=y
-# BR2_PACKAGE_LIBGPG_ERROR is not set
-BR2_PACKAGE_LIBGPG_ERROR_SYSCFG="i686-pc-linux-gnu"
-# BR2_PACKAGE_NETTLE is not set
 # BR2_PACKAGE_OPENSSL is not set
 
 #
 # Database
 #
-# BR2_PACKAGE_BERKELEYDB is not set
-# BR2_PACKAGE_GDBM is not set
 # BR2_PACKAGE_SQLITE is not set
-
-#
-# Filesystem
-#
-# BR2_PACKAGE_LIBCONFUSE is not set
 
 #
 # Graphics
 #
 # BR2_PACKAGE_JPEG is not set
 # BR2_PACKAGE_LIBEXIF is not set
-# BR2_PACKAGE_LIBPNG is not set
 
 #
 # Hardware Handling
 #
-# BR2_PACKAGE_DBUS is not set
-# BR2_PACKAGE_HD_IDLE is not set
-# BR2_PACKAGE_HDPARM is not set
 # BR2_PACKAGE_HOTPLUG2 is not set
-# BR2_PACKAGE_LIBUSB is not set
-# BR2_PACKAGE_SDPARM is not set
 # BR2_PACKAGE_UDEV is not set
-# BR2_PACKAGE_USB_MODESWITCH is not set
 
 #
 # Interpreter languages and scripting
 #
-# BR2_PACKAGE_LUA is not set
+# BR2_PACKAGE_PYTHON is not set
 
 #
 # JSON/XML
 #
-# BR2_PACKAGE_EXPAT is not set
-# BR2_PACKAGE_JSON_C is not set
 # BR2_PACKAGE_LIBXML2 is not set
-# BR2_PACKAGE_MXML is not set
 
 #
 # Multimedia
 #
-# BR2_PACKAGE_LIBAV is not set
 # BR2_PACKAGE_LIBOGG is not set
 
 #
 # Networking
 #
-# BR2_PACKAGE_6RELAYD is not set
-# BR2_PACKAGE_COMGT is not set
 # BR2_PACKAGE_GEOIP is not set
 # BR2_PACKAGE_LIBCURL is not set
-# BR2_PACKAGE_LIBMNL is not set
-# BR2_PACKAGE_LIBNFNETLINK is not set
 # BR2_PACKAGE_LIBPCAP is not set
-# BR2_PACKAGE_L7PROTOCOLS is not set
-# BR2_PACKAGE_UPNP is not set
-# BR2_PACKAGE_NEON is not set
-
-#
-# Text and terminal handling
-#
-# BR2_PACKAGE_LIBICONV is not set
-# BR2_PACKAGE_LIBUNISTRING is not set
-
-#
-# libunistring needs a toolchain w/ wchar
-#
-# BR2_PACKAGE_NCURSES is not set
-# BR2_PACKAGE_PCRE is not set
-# BR2_PACKAGE_TRE is not set
 
 #
 # Networking applications
 #
-# BR2_PACKAGE_AMULE is not set
-# BR2_PACKAGE_AVAHI is not set
 # BR2_PACKAGE_BFTPD is not set
 # BR2_PACKAGE_BRIDGE_UTILS is not set
-# BR2_PACKAGE_DHCPCD is not set
+# BR2_PACKAGE_DHCP is not set
 # BR2_PACKAGE_DNSMASQ is not set
-# BR2_PACKAGE_DROPBEAR is not set
-# BR2_PACKAGE_EBTABLES is not set
-# BR2_PACKAGE_EMAIL is not set
-# BR2_PACKAGE_EZ_IPUPDATE is not set
-# BR2_PACKAGE_FORKED_DAAPD is not set
 
-#
-# igmpproxy needs a toolchain w/ wchar
-#
-
-#
-# iperf needs a toolchain w/ C++
-#
 # BR2_PACKAGE_IPROUTE2 is not set
-# BR2_PACKAGE_IPSET is not set
 # BR2_PACKAGE_IPTABLES is not set
 # BR2_PACKAGE_L2TPD is not set
-# BR2_PACKAGE_LIGHTTPD is not set
-# BR2_PACKAGE_LPRNG is not set
 
 #
 # minidlna needs a toolchain w/ dynamic library, threads, wchar
 #
-# BR2_PACKAGE_NCFTP is not set
-# BR2_PACKAGE_NETATALK is not set
-# BR2_PACKAGE_NETSNMP is not set
-# BR2_PACKAGE_NETSTAT_NAT is not set
 # BR2_PACKAGE_NTPCLIENT is not set
-# BR2_PACKAGE_ODHCP6C is not set
 # BR2_PACKAGE_OPENVPN is not set
 # BR2_PACKAGE_PPPD is not set
-# BR2_PACKAGE_PPPOECD is not set
-# BR2_PACKAGE_PPTP is not set
 # BR2_PACKAGE_RADVD is not set
-# BR2_PACKAGE_RP_PPPOE is not set
-# BR2_PACKAGE_RP_L2TP is not set
-# BR2_PACKAGE_SAMBA is not set
+# BR2_PACKAGE_SAMBA4 is not set
 # BR2_PACKAGE_TCPDUMP is not set
-# BR2_PACKAGE_TOR is not set
-# BR2_PACKAGE_TRANSMISSION is not set
 # BR2_PACKAGE_UDHCPD is not set
 # BR2_PACKAGE_VLAN is not set
-# BR2_PACKAGE_VSFTPD is not set
-# BR2_PACKAGE_WAKELAN is not set
 # BR2_PACKAGE_WGET is not set
-# BR2_PACKAGE_WPA_SUPPLICANT is not set
 # BR2_PACKAGE_ZEBRA is not set
 # BR2_PACKAGE_ZEROCONF is not set
-
-#
-# Other
-#
-# BR2_PACKAGE_LIBDAEMON is not set
-# BR2_PACKAGE_LIBANTLR is not set
-# BR2_PACKAGE_LIBUBOX is not set
-# BR2_PACKAGE_LIBEVENT is not set
-# BR2_PACKAGE_OPENPAM is not set
-# BR2_PACKAGE_PORTMAP is not set
-# BR2_PACKAGE_UQMI is not set
-
-#
-# Other GUIs
-#
-# BR2_PACKAGE_WXWIDGETS is not set
 
 #
 # Router Core
