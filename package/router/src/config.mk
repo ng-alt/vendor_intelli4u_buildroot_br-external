@@ -101,3 +101,4 @@ IPV6RD_ENABLE_FLAG=y
 # Foxconn Perry added, 11/19/2014, for Facebook WiFi debug
 CONFIG_FBWIFI_DEBUG=n
 
+CONFIG_BT_IGMP=y
