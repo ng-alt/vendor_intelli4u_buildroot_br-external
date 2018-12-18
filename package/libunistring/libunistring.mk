@@ -17,5 +17,11 @@ else
 LIBUNISTRING_CONF_OPTS += --disable-threads
 endif
 
+# glibc seems to use invalidly and cause compilation problem.
+define LIBUNISTRING_FIXUP_GNULIB
+	$(SED) 's,^\s*name = thread_locale->__names\[category];,// name = thread_locale->__names[category];,g' $(@D)/gnulib/lib/localename.c
+endef
+LIBUNISTRING_PRE_CONFIGURE_HOOKS = LIBUNISTRING_FIXUP_GNULIB
+
 $(eval $(autotools-package))
 $(eval $(host-autotools-package))
