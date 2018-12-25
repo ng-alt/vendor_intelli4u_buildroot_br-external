@@ -196,4 +196,17 @@ endef
 AVAHI_POST_INSTALL_STAGING_HOOKS += AVAHI_STAGING_INSTALL_LIBDNSSD_LINK
 endif
 
+# secure to re-install avahi
+define AVAHI_PRE_INSTALL_SERVICE_SOFTLINK
+	rm -rf $(TARGET_DIR)/etc/avahi/services
+endef
+AVAHI_PRE_INSTALL_TARGET_HOOKS += AVAHI_PRE_INSTALL_SERVICE_SOFTLINK
+
+define AVAHI_INSTALL_SERVICE_SOFTLINK
+	rm -rf $(TARGET_DIR)/etc/avahi/services && \
+		mkdir -p $(TARGET_DIR)/tmp/avahi/services && \
+		ln -sf /tmp/avahi/services $(TARGET_DIR)/etc/avahi/services
+endef
+AVAHI_POST_INSTALL_TARGET_HOOKS += AVAHI_INSTALL_SERVICE_SOFTLINK
+
 $(eval $(autotools-package))
