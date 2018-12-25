@@ -1,0 +1,7 @@
+config BR2_PACKAGE_TRE
+	bool tre
+	help
+	  tre is a lightweight, robust, and efficent POSIX compliant regexp
+	  matching library with some exciting features such as approximate
+	  (fuzzy) matching.
+
