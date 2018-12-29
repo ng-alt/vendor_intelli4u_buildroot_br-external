@@ -83,6 +83,13 @@ define ROUTER_INSTALL_TARGET_CMDS
 	rsync -au $(@D)/arm-uclibc/target $(BASE_DIR)
 	cd $(@D)/compressed && $(TARGET_CONFIGURE_OPTS) $(MAKE1) $(ROUTER_MAKE_OPTS) all && cp vmlinuz $(BINARIES_DIR)/
 	$(INSTALL) -D -m 0500 $(@D)/httpd/gencert.sh $(TARGET_DIR)/usr/sbin/gencert.sh
+	for ko in $(TARGET_DIR)/lib/modules/*/kernel/fs/*.ko ; do \
+		for prep in tfat.ko thfsplus.ko tntfs.ko ; do \
+			if echo $$ko | grep -q $$prep ; then \
+				$(BR2_EXTERNAL_NETGEAR_PATH)/scripts/patch_kobj_version.py -v $$ko $(LINUX_DIR)/Module.symvers; \
+			fi; \
+		done; \
+	done
 endef
 
 ifeq ($(BR2_PACKAGE_ROUTER),y)
