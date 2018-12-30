@@ -5,3 +5,12 @@ config BR2_PACKAGE_SRC_BASE
 
 	  It provides the extra files like Makefile, router components.
 
+if BR2_PACKAGE_SRC_BASE
+
+config BR2_PACKAGE_SRC_BASE_OVERRIDED_TARGET
+	string "src-base overrided target file"
+	help
+	  Overrided target makefile for specified config beyond the original
+
+endif
+
