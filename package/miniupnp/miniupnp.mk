@@ -4,7 +4,6 @@
 #
 ################################################################################
 
-MINIUPNP_SITE = https://github.com/westes/flex/files/981163
 MINIUPNP_VERSION_FILE = miniupnpd/VERSION
 MINIUPNP_LICENSE = BSD-3-Clause
 MINIUPNP_LICENSE_FILE =
@@ -32,7 +31,7 @@ define MINIUPNPC_BUILD_CMDS
 endef
 
 define MINIUPNPC_INSTALL_TARGET_CMDS
-	install -D $(@D)/miniupnpc/upnpc-static $(TARGET_DIR)/miniupnpc/usr/sbin/miniupnpc
+	install -D $(@D)/miniupnpc/upnpc-static $(TARGET_DIR)/usr/sbin/miniupnpc
 endef
 endif
 
