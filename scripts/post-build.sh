@@ -196,6 +196,9 @@ function clean_files {
   remove_force /usr/lib/wx /usr/share/bakefile/presets
 
   #------------------------------------------------------------------
+  #- remove lib32 by skeleton-custom
+  remove /lib32 /usr/lib32
+
   #- remove specified directories
   remove_force /usr/include /usr/aclocal /usr/doc /share/info /usr/share/terminfo
 
