@@ -16,18 +16,25 @@ SRC_BASE_OVERRIDED_TARGET = $(call qstrip,$(BR2_PACKAGE_SRC_BASE_OVERRIDED_TARGE
 # includes the patches for the file. Append profile.merlin.alt.mak to profile.mak to
 # adjust some configurations
 define SRC_BASE_BUILD_CMDS
-	for script in platform.mak profile.mak target.mak version.conf ; do \
-		rsync -au $(SRC_BASE_REF_DIR)/$$script $(@D)/; \
-	done
+	if [ ! -e "$(@D)/platform/mak" ] ; then \
+		for script in platform.mak profile.mak target.mak version.conf ; do \
+			rsync -au $(SRC_BASE_REF_DIR)/$$script $(@D)/; \
+		done; \
+	fi
 
 	if [ -n "$(SRC_BASE_OVERRIDED_TARGET)" ] ; then \
 		echo "" >> $(@D)/target.mak; \
 		cat $(SRC_BASE_OVERRIDED_TARGET) >> $(@D)/target.mak; \
 	fi
 
-	rsync -au $(SRC_BASE_REF_DIR)/Makefile $(@D)/Makefile.asus && \
-		$(SED) '/$$(MAKE) bin/d' -e 's,router/,./,g' $(@D)/Makefile.asus && \
-		make -C $(@D) -f Makefile.asus rt_ver $(BUILD_NAME) LINUXDIR=$(LINUX_DIR)
+	if grep -q rt_ver $(@D)/Makefile ; then \
+		EXT= ; \
+	else \
+		EXT=.asus; \
+		rsync -au $(SRC_BASE_REF_DIR)/Makefile $(@D)/Makefile.asus; \
+	fi; \
+	$(SED) '/$$(MAKE) bin/d' -e 's,router/,./,g' $(@D)/Makefile$(EXT) && \
+	make -C $(@D) -f Makefile$(EXT) rt_ver $(BUILD_NAME) LINUXDIR=$(LINUX_DIR)
 endef
 
 $(eval $(generic-package))
