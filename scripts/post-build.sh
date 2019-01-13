@@ -2,7 +2,7 @@
 
 TARGET_DIR=$BR2_OUTDIR/target
 
-STRIPCMD="`ls $BR2_OUTDIR/host/bin/*-strip` --remove-section=.comment --remove-section=.note --strip-debug"
+STRIPCMD="arm-linux-strip --remove-section=.comment --remove-section=.note --strip-debug"
 
 function exists {
   if [ -e $TARGET_DIR/$1 ] ; then
@@ -46,7 +46,6 @@ function remove_with_find {
   find $TARGET_DIR $* -exec rm -v {} \;
 }
 
-
 function remove_with_find_force {
   find $TARGET_DIR $* -exec rm -vrf {} \;
 }
@@ -64,6 +63,7 @@ function get_link {
 
 #-------------------------------------------
 function strip_exec {
+  #- strip executables in directory /opt
   for file in opt/leafp2p/leafp2p \
               opt/rcagent/cgi/rccommand.cgi \
               opt/rcagent/cgi_processor \
@@ -85,6 +85,9 @@ function strip_exec {
       fi
     fi
   done
+
+  #- strip ko files
+  find $TARGET_DIR/lib/modules/ -name '*.ko' -exec $STRIPCMD {} \;
 }
 
 function clean_files {
