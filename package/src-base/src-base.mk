@@ -33,7 +33,9 @@ define SRC_BASE_BUILD_CMDS
 		EXT=.asus; \
 		rsync -au $(SRC_BASE_REF_DIR)/Makefile $(@D)/Makefile.asus; \
 	fi; \
-	$(SED) '/$$(MAKE) bin/d' -e 's,router/,./,g' $(@D)/Makefile$(EXT) && \
+	$(SED) '/$$(MAKE) bin/d' -e 's,router/,./,g' \
+		-e '/^BUILD_INFO/ { s|shell git log|shell git --git-dir $(SRC_BASE_REF_DIR)/.git log| }' \
+		$(@D)/Makefile$(EXT) && \
 	make -C $(@D) -f Makefile$(EXT) rt_ver $(BUILD_NAME) LINUXDIR=$(LINUX_DIR)
 endef
 
