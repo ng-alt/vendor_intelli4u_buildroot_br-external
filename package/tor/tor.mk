@@ -47,4 +47,8 @@ endif
 # uses gnu extensions
 TOR_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
 
+define TOR_INSTALL_TARGET_CMDS
+	install -D $(@D)/src/or/tor $(TARGET_DIR)/usr/sbin/Tor
+endef
+
 $(eval $(autotools-package))
