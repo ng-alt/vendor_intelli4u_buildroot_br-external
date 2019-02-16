@@ -7,7 +7,7 @@
 #
 BR2_DEFCONFIG="$(BR2_EXTERNAL_NETGEAR_PATH)/configs/r6300v2-merlin_defconfig"
 BR2_ENVIRON_CONFIGS="$(BR2_EXTERNAL_NETGEAR_PATH)/board/common/build.config $(BR2_EXTERNAL_NETGEAR_PATH)/board/common/merlin.config"
-BR2_GLOBAL_EXPORT_VAR="PROFILE=R6300v2 VENDOR=merlin"
+BR2_GLOBAL_EXPORT_VAR="PROFILE=R6300v2 VENDOR=merlin BRAND=NETGEAR"
 
 #
 # Filesystem images
