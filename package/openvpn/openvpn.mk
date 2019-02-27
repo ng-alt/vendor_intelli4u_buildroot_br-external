@@ -49,6 +49,9 @@ else
 OPENVPN_CONF_OPTS += --disable-lzo
 endif
 
+OPENVPN_DEPENDENCIES += router
+OPENVPN_CONF_OPTS += $(ROUTER_DEPENDENCY_MAKE_OPTS)
+
 define OPENVPN_INSTALL_TARGET_CMDS
 	$(INSTALL) -m 755 $(@D)/src/openvpn/openvpn $(TARGET_DIR)/usr/sbin/openvpn
 endef
