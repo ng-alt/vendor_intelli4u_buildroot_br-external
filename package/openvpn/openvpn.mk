@@ -4,10 +4,9 @@
 #
 ################################################################################
 
-OPENVPN_VERSION_FILE = configure.ac
-OPENVPN_VERSION_PATTERN = "@(mym4_version_major).@(mym4_version_minor)@(mym4_version_micro)"
-OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
 OPENVPN_VERSION_FILE = version.m4
+OPENVPN_VERSION_PATTERN = "@(PRODUCT_VERSION_MAJOR).@(PRODUCT_VERSION_MINOR)@(PRODUCT_VERSION_PATCH)"
+OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
 OPENVPN_DEPENDENCIES = host-pkgconf openssl
 OPENVPN_AUTORECONF = YES
 OPENVPN_LICENSE = GPL-2.0
