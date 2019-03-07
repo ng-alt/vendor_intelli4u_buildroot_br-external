@@ -23,7 +23,7 @@ fi
 variant=$(echo "$PROFILE" | tr A-Z a-z)
 
 cd $BR2_OUTDIR/$IMG_DIR && (
-  PREFIX=${PROFILE}-${VERSION}_$(date +%m%d-%H%M)
+  PREFIX=${PROFILE}-${VERSION}_$(date +%y%m%d-%H%M)
 
   mkdir -p $TMP_DIR && (
     cd $TMP_DIR
