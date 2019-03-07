@@ -27,7 +27,7 @@ cd $BR2_OUTDIR/$IMG_DIR && (
     touch rootfs && \
     packet -k ../linux.trx -f rootfs \
       -b $BR2_TOPDIR/vendor/netgear/router/arm-uclibc/compatible_$(echo "$PROFILE" | tr A-Z a-z).txt \
-      -ok kernel_image -oall ../${PROFILE}-${VERSION}_$(date +%m%d-%H%M) -or rootfs_image \
+      -ok kernel_image -oall ../${PROFILE}-${VERSION}_$(date +%y%m%d-%H%M) -or rootfs_image \
       -i $BR2_TOPDIR/$ACOS/include/ambitCfg.h && \
     rm -rf rootfs
   )
