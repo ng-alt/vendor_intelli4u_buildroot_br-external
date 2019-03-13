@@ -10,6 +10,7 @@ endmenu
 menu "Audio and video applications"
 	source "package/ffmpeg/Config.in"
 	source "package/flac/Config.in"
+	source "package/udpxy/Config.in"
 endmenu
 
 menu "Compressors and decompressors"
@@ -22,15 +23,20 @@ endmenu
 menu "Development tools"
 	source "package/flex/Config.in"
 	source "package/gettext/Config.in"
-	source "package/gperf/Config.in"
-	source "package/libavl/Config.in"
 endmenu
 
 menu "Filesystem and flash utilities"
 	source "package/cramfs/Config.in"
-	source "package/mtools/Config.in"
-	source "package/ntfs-3g/Config.in"
+	source "package/e2fsprogs/Config.in"
+	source "package/nfs-utils/Config.in"
 	source "package/squashfs/Config.in"
+endmenu
+
+menu "Hardware handling"
+	source "package/hdparm/Config.in"
+	source "package/hub-ctrl/Config.in"
+	source "package/sdparm/Config.in"
+	source "package/usb_modeswitch/Config.in"
 endmenu
 
 menu "Compression and decompression"
@@ -40,7 +46,6 @@ menu "Compression and decompression"
 endmenu
 
 menu "Crypto"
-	source "package/libcryptoxx/Config.in"
 	source "package/libgcrypt/Config.in"
 	source "package/libgpg-error/Config.in"
 	source "package/openssl/Config.in"
@@ -52,10 +57,6 @@ menu "Database"
 	source "package/sqlite/Config.in"
 endmenu
 
-menu "Filesystem"
-	source "package/libconfuse/Config.in"
-endmenu
-
 menu "Graphics"
 	source "package/jpeg/Config.in"
 	source "package/libexif/Config.in"
@@ -63,20 +64,16 @@ endmenu
 
 menu "Hardware Handling"
 	source "package/dbus/Config.in"
-	source "package/hd-idle/Config.in"
-	source "package/hdparm/Config.in"
 	source "package/hotplug2/Config.in"
 	source "package/udev/Config.in"
-endmenu
-
-menu "Interpreter languages and scripting"
-	source "package/python/Config.in"
+	source "package/libusb/Config.in"
+	source "package/libusb-compat/Config.in"
 endmenu
 
 menu "JSON/XML"
 	source "package/expat/Config.in"
+	source "package/json-c/Config.in"
 	source "package/libxml2/Config.in"
-	source "package/mxml/Config.in"
 endmenu
 
 menu "Multimedia"
@@ -84,60 +81,92 @@ menu "Multimedia"
 endmenu
 
 menu "Networking"
+	source "package/accel-pptp/Config.in"
+	source "package/comgt/Config.in"
+	source "package/forked-daapd/Config.in"
 	source "package/geoip/Config.in"
 	source "package/libcurl/Config.in"
+	source "package/libmnl/Config.in"
+	source "package/libnfnetlink/Config.in"
 	source "package/libpcap/Config.in"
+	source "package/l7protocols/Config.in"
+	source "package/miniupnp/Config.in"
+	source "package/neon/Config.in"
 endmenu
 
 menu "Other"
-	source "package/libantlr/Config.in"
 	source "package/libdaemon/Config.in"
+	source "package/libev/Config.in"
 	source "package/libevent/Config.in"
+	source "package/openpam/Config.in"
+	source "package/portmap/Config.in"
+	source "package/libubox/Config.in"
+	source "package/uqmi/Config.in"
 endmenu
 
 menu "Text and terminal handling"
 	source "package/libiconv/Config.in"
-	source "package/libunistring/Config.in"
-	source "package/tre/Config.in"
+	source "package/ncurses/Config.in"
+	source "package/pcre/Config.in"
 endmenu
 
 menu "Networking applications"
-	source "package/amule/Config.in"
+	source "package/6relayd/Config.in"
 	source "package/avahi/Config.in"
 	source "package/bftpd/Config.in"
 	source "package/bridge-utils/Config.in"
 	source "package/dhcp/Config.in"
 	source "package/dnsmasq/Config.in"
-	source "package/forked-daapd/Config.in"
+	source "package/dropbear/Config.in"
+	source "package/ebtables/Config.in"
+	source "package/email/Config.in"
+	source "package/ez-ipupdate/Config.in"
+	source "package/igmpproxy/Config.in"
 	source "package/igmpv3proxy/Config.in"
-	source "package/iperf/Config.in"
 	source "package/iproute2/Config.in"
+	source "package/ipset/Config.in"
 	source "package/iptables/Config.in"
 	source "package/l2tpd/Config.in"
+	source "package/libsmbclient/Config.in"
+	source "package/lighttpd/Config.in"
+	source "package/lprng/Config.in"
 	source "package/minidlna/Config.in"
 	source "package/netatalk/Config.in"
+	source "package/netsnmp/Config.in"
+	source "package/netstat-nat/Config.in"
 	source "package/ntpclient/Config.in"
+	source "package/odhcp6c/Config.in"
 	source "package/openvpn/Config.in"
+	source "package/phddns/Config.in"
 	source "package/pppd/Config.in"
 	source "package/pppoecd/Config.in"
 	source "package/pptp/Config.in"
+	source "package/quagga/Config.in"
 	source "package/radvd/Config.in"
-	source "package/samba4/Config.in"
+	source "package/rp-pppoe/Config.in"
+	source "package/rp-l2tp/Config.in"
+	source "package/samba/Config.in"
 	source "package/tcpdump/Config.in"
-	source "package/transmission/Config.in"
+	source "package/tor/Config.in"
 	source "package/udhcpd/Config.in"
 	source "package/vlan/Config.in"
-	source "package/wakelan/Config.in"
+	source "package/vsftpd/Config.in"
 	source "package/wget/Config.in"
-	source "package/zebra/Config.in"
+	source "package/wpa_supplicant/Config.in"
 	source "package/zeroconf/Config.in"
 endmenu
 
-menu "Other GUIs"
-	source "package/wxwidgets/Config.in"
+menu "Shell and utilities"
+comment "Utilities"
+	source "package/easy-rsa/Config.in"
 endmenu
 
-menu "Router Core"
+menu "Text editors and viewers"
+	source "package/nano/Config.in"
+endmenu
+
+menu "Router"
+	source "package/src-base/Config.in"
 	source "package/router/Config.in"
 endmenu
 

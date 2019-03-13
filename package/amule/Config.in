@@ -1,7 +1,0 @@
-config BR2_PACKAGE_AMULE
-	bool "aMule"
-	help
-	  aMule is an eMule-like client for the eD2k and Kademlia networks,
-	  supporting multiple platforms.
-
-	  http://amule.org/

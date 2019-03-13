@@ -1,0 +1,12 @@
+config BR2_PACKAGE_ACCEL_PPTP
+	bool "accel-pptp"
+	help
+	  The ACCEL-PPTP is PPTP client/server based on POPTOP (http://www.poptop.org)
+	  and PPTPCLIENT (http://pptpclient.sourceforge.net).
+
+	  ACCEL-PPTP uses kernel module to increase performance and decrease system
+	  usage. For more documentation about PPTP visit POPTOP web site. ACCEL-PPTP
+	  was successfully tested on about 1200 connections and system usage has been
+	  decreased by ~50% on comparisons with the original poptop server.
+
+	  http://accel-pptp.sourceforge.net

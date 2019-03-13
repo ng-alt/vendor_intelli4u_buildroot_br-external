@@ -1,7 +1,0 @@
-config BR2_PACKAGE_LIBCRYPTOXX
-	bool "Crypto++ Library"
-	help
-	  Crypto++ library is a free C++ class library of cryptographic schemes.
-	  The library contains lots of algorithms.
-
-	  https://www.cryptopp.com/

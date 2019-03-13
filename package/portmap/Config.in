@@ -1,0 +1,29 @@
+config BR2_PACKAGE_PORTMAP
+	bool "portmap"
+	help
+	  Like all portmappers, this one is intended to be started at boot time.
+	  Daemons that offer RPC services tell the portmapper on what port they
+	  listen. Unlike the well-known services registered with the inetd, RPC
+	  network port numbers may change each time the system is booted.
+	  Whenever a client wants to use an RPC service it is supposed to first
+	  ask the portmapper on what port the corresponding daemon is listening.
+	  The rpcinfo command can tell you what RPC services your system offers.
+	  
+	  As described in the features section below, the replacement portmapper
+	  can prevent undesirable client-server interactions.  In some cases,
+	  better or equivalent alternatives are available:
+	  
+	      The SunOS portmap that is provided with patch id 100482-02 should
+	      close the same security holes.  In addition, it provides an YPSERV
+	      daemon with its own access control list. This is better than just
+	      portmapper access control.
+	  
+	      The "securelib" shared library (eecs.nwu.edu:/pub/securelib.tar)
+	      implements access control for all kinds of (RPC) services, not
+	      just the portmapper.
+	  
+	  However, vendors still ship portmap implementations that allow anyone
+	  to read or modify its tables and that will happily forward any request
+	  so that it appears to come from the local system.
+
+	  git://git.neil.brown.name/portmap.git

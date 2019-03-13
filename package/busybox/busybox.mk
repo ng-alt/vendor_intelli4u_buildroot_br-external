@@ -8,6 +8,8 @@ BUSYBOX_SITE = http://www.busybox.net/downloads
 BUSYBOX_LICENSE = GPL-2.0
 BUSYBOX_LICENSE_FILES = LICENSE
 
+BUSYBOX_DEPENDENCIES += $(if $(BR2_PACKAGE_OPENSSL),openssl)
+
 define BUSYBOX_HELP_CMDS
 	@echo '  busybox-menuconfig     - Run BusyBox menuconfig'
 endef
@@ -181,7 +183,6 @@ define BUSYBOX_CONFIGURE_CMDS
 endef
 
 define BUSYBOX_BUILD_CMDS
-	ln -sf include/autoconf.h $(@D)/Config.h
 	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D)
 endef
 

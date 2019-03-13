@@ -6,6 +6,7 @@
 
 WGET_SITE = $(BR2_GNU_MIRROR)/wget
 WGET_AUTOGEN = YES
+WGET_AUTOGEN_OPTS = --no-git --skip-po --gnulib-srcdir=$(BR2_TOPDIR)/external/gnulib
 WGET_DEPENDENCIES = host-pkgconf
 WGET_LICENSE = GPL-3.0+
 WGET_LICENSE_FILES = COPYING
@@ -44,7 +45,7 @@ endef
 WGET_PRE_CONFIGURE_HOOKS += WGET_DISABLE_BUILD
 
 define WGET_INSTALL_TARGET_CMDS
-	$(INSTALL) -m 0755 $(@D)/src/wget $(TARGET_DIR)/bin/
+	$(INSTALL) -m 0755 $(@D)/src/wget $(TARGET_DIR)/usr/sbin/
 endef
 
 $(eval $(autotools-package))

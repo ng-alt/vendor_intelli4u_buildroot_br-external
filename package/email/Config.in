@@ -1,0 +1,4 @@
+config BR2_PACKAGE_EMAIL
+	bool "email"
+	help
+	  Programs to send email via the command line to remote SMTP server.

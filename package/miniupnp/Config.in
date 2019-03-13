@@ -1,0 +1,26 @@
+config BR2_PACKAGE_MINIUPNP
+	bool "miniupnp"
+	help
+	  The MiniUPnP project offers software which supports the UPnP Internet
+	  Gateway Device (IGD) specifications. NAT-PMP and PCP support was added
+	  to MiniUPnPd.
+
+	  http://miniupnp.free.fr/
+
+if BR2_PACKAGE_MINIUPNP
+
+config BR2_TARGET_ENABLE_MINIUPNPD
+	bool "miniupnpd"
+	help
+	  The MiniUPnP daemon (MiniUPnPd) supports OpenBSD, FreeBSD, NetBSD,
+	  DragonFly BSD, (Open)Solaris and Mac OS X in combination with pf or ipfw
+	  (ipfirewall) or ipf and Linux with netfilter.
+
+config BR2_TARGET_ENABLE_MINIUPNPC
+	bool "miniupnpc"
+	help
+	  The MiniUPnP client (MiniUPnPc) and MiniSSDPd are portable and should work
+	  on any POSIX system. MiniUPnPc also works under MS Windows and AmigaOS
+	  (version 3 and 4).
+
+endif

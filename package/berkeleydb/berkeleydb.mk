@@ -19,7 +19,7 @@ BERKELEYDB_BINARIES = db_archive db_checkpoint db_deadlock db_dump \
 	db_hotbackup db_load db_log_verify db_printlog db_recover db_replicate \
 	db_stat db_tuner db_upgrade db_verify db_codegen
 
-BERKELEYDB_SUBDIR = build_arm
+BERKELEYDB_SUBDIR = build_unix
 
 # Internal error, aborting at dw2gencfi.c:214 in emit_expr_encoded
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79509
@@ -61,7 +61,7 @@ define BERKELEYDB_DIST_CONFIGURE
 		--disable-libtool-lock
 endef
 
-BERKELEYDB_PRE_CONFIGURE_HOOKS += BERKELEYDB_SYNC_ARCH_BUILD_FILE
+BERKELEYDB_PRE_CONFIGURE_HOOKS += BERKELEYDB_DIST_CONFIGURE
 
 define BERKELEYDB_BUILD_CMDS
 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/$(BERKELEYDB_SUBDIR) \

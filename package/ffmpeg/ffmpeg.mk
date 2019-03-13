@@ -14,6 +14,7 @@ FFMPEG_LICENSE += and GPL-2.0+
 FFMPEG_LICENSE_FILES += COPYING.GPLv2
 endif
 
+
 FFMPEG_CONF_OPTS = \
 	--prefix=/usr \
 	--enable-avfilter \

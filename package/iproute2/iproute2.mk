@@ -55,10 +55,14 @@ define IPROUTE2_REMOVE_IFCFG
 endef
 endif
 
+define IPROUTE2_SUPPRESS_TARGET
+	$(SED) 's/SUBDIRS=lib ip tc bridge misc netem genl man/SUBDIRS=lib ip tc/' $(@D)/Makefile
+endef
+
 define IPROUTE2_BUILD_CMDS
 	$(IPROUTE2_DISABLE_ARPD)
 	$(IPROUTE2_WITH_IPTABLES)
-	$(IPROUTE2_ROUTER_SUPPRESS)
+	$(IPROUTE2_SUPPRESS_TARGET)
 	$(SED) 's/$$(CCOPTS)//' $(@D)/netem/Makefile
 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
 		DBM_INCLUDE="$(STAGING_DIR)/usr/include" \
@@ -69,10 +73,10 @@ endef
 define IPROUTE2_INSTALL_TARGET_CMDS
 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
 		DESTDIR="$(TARGET_DIR)" \
-		SBINDIR=/usr/sbin \
+		SBINDIR=/sbin \
 		DOCDIR=/usr/share/doc/iproute2-$(IPROUTE2_VERSION) \
 		MANDIR=/usr/share/man install
 	$(IPROUTE2_REMOVE_IFCFG)
 endef
 
-$(eval $(generic-package))
+$(eval $(autotools-package))

@@ -1,0 +1,10 @@
+config BR2_PACKAGE_LIBUBOX
+	bool "libubox"
+	help
+	  This library originates from the OpenWrt project to
+	  handle the configuration file infrastructure, but can
+	  also be used for the same purposes in projects other
+	  than OpenWrt.
+
+	  http://nbd.name/gitweb.cgi?p=luci2/libubox.git;a=summary
+

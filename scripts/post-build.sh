@@ -1,8 +1,8 @@
 #!/bin/bash
 
-TARGET_DIR=${BR2_OUTDIR}/target
+TARGET_DIR=$BR2_OUTDIR/target
 
-STRIPCMD="`ls $BR2_OUTDIR/host/bin/*-strip` --remove-section=.comment --remove-section=.note --strip-debug"
+STRIPCMD="arm-linux-strip --remove-section=.comment --remove-section=.note --strip-debug"
 
 function exists {
   if [ -e $TARGET_DIR/$1 ] ; then
@@ -46,7 +46,6 @@ function remove_with_find {
   find $TARGET_DIR $* -exec rm -v {} \;
 }
 
-
 function remove_with_find_force {
   find $TARGET_DIR $* -exec rm -vrf {} \;
 }
@@ -64,6 +63,7 @@ function get_link {
 
 #-------------------------------------------
 function strip_exec {
+  #- strip executables in directory /opt
   for file in opt/leafp2p/leafp2p \
               opt/rcagent/cgi/rccommand.cgi \
               opt/rcagent/cgi_processor \
@@ -85,6 +85,9 @@ function strip_exec {
       fi
     fi
   done
+
+  #- strip ko files
+  find $TARGET_DIR/lib/modules/ -name '*.ko' -exec $STRIPCMD {} \;
 }
 
 function clean_files {
@@ -109,7 +112,7 @@ function clean_files {
 
   #- e2fsprog
   remove /bin/chattr /bin/lsattr /bin/uuidgen
-  
+
   #- ffmpeg
   remove /usr/bin/ffmpeg
   remove_force /usr/share/ffmpeg/examples
@@ -175,7 +178,7 @@ function clean_files {
 
   #- router
   remove_force /rom/cfe
-  
+
   #- sqlite
   remove /usr/bin/sqlite3
 
@@ -195,10 +198,10 @@ function clean_files {
   #- wx
   remove_force /usr/lib/wx /usr/share/bakefile/presets
 
-  #- zebra
-  remove /etc/ripd.conf.sample /etc/zebra.conf.sample
-
   #------------------------------------------------------------------
+  #- remove lib32 by skeleton-custom
+  remove /lib32 /usr/lib32
+
   #- remove specified directories
   remove_force /usr/include /usr/aclocal /usr/doc /share/info /usr/share/terminfo
 
@@ -212,7 +215,8 @@ function clean_files {
   remove_with_find -type f \( -name '*.a' -o -name '*.la' \)
 
   #- clean up kernel modules.*
-  remove_with_find -type f -name 'modules.*'
+  remove_with_find -type f \( \( -name 'modules*' \) -a \
+    -not \( -name modules.dep -o -name modules.builtin -o -name modules.order \) \)
 
   #- clean up .msg, .pc and .m4
   remove_with_find -type f \( -name '*.msg' -o -name '*.m4' -o -name '*.pc' \)
@@ -223,7 +227,26 @@ function clean_files {
   done
 }
 
+function update_kobjs {
+  # follow asus-merlin router/Makefile to shorten ko paths
+  mv -f $TARGET_DIR/lib/modules/*/kernel/drivers/net/{bcm57xx,bonding,ctf,ctf_5358,et,et.4702,emf,igs,wl}/*.ko $TARGET_DIR/lib/modules/*/kernel/drivers/net/ 2>/dev/null
+  mv -f $TARGET_DIR/lib/modules/*/kernel/drivers/net/wl/{wl_high,wl_sta}/wl_high.ko $TARGET_DIR/lib/modules/*/kernel/drivers/net/ 2>/dev/null
+  mv -f $TARGET_DIR/lib/modules/*/kernel/drivers/usb/{hcd,host,storage,serial,core,class,misc}/*.ko $TARGET_DIR/lib/modules/*/kernel/drivers/usb/ 2>/dev/null
+
+  mv -f $TARGET_DIR/lib/modules/*/kernel/fs/{cifs,exportfs,ext2,ext3,ext4,fat,fuse,hfsplus,jbd,jbd2,jffs,jffs2,lockd,msdos,nfs,nfsd,nls,ntfs,smbfs,reiserfs,vfat,xfs}/*.ko $TARGET_DIR/lib/modules/*/kernel/fs/ 2>/dev/null
+  mv -f $TARGET_DIR/lib/modules/*/kernel/lib/{zlib_inflate,zlib_deflate,lzo}/*.ko $TARGET_DIR/lib/modules/*/kernel/lib 2>/dev/null
+  mv -f $TARGET_DIR/lib/modules/*/kernel/net/{sunrpc,sunrpc/auth_gss}/*.ko $TARGET_DIR/lib/modules/*/kernel/net/ 2>/dev/null
+
+  # execute to remove dirs twice (two-level directory movement)
+  find $TARGET_DIR/lib/modules/*/kernel/ -type d -exec rmdir {} \; 2>/dev/null
+  find $TARGET_DIR/lib/modules/*/kernel/ -type d -exec rmdir {} \; 2>/dev/null
+
+  $BR2_TOPDIR/external/busybox/examples/depmod.pl -k $BR2_OUTDIR/build/linux*/vmlinux -b $TARGET_DIR/lib/modules/*/
+}
+
 #- MAIN
+update_kobjs
+
 strip_exec
 clean_files
 
