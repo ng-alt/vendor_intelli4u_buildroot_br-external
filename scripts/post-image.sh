@@ -23,7 +23,7 @@ fi
 variant=$(echo "$PROFILE" | tr A-Z a-z)
 
 cd $BR2_OUTDIR/$IMG_DIR && (
-  PREFIX=${PROFILE}-${VERSION}_$(date +%m%d-%H%M)
+  PREFIX=${PROFILE}-${VERSION}_$(date +%y%m%d-%H%M)
 
   mkdir -p $TMP_DIR && (
     cd $TMP_DIR
@@ -37,9 +37,9 @@ cd $BR2_OUTDIR/$IMG_DIR && (
 
     #-- build chk file
     packet -k linux.trx -f rootfs \
-      -b $BR2_TOPDIR/vendor/intelli4u/buildroot/board/$variant/compatible_$variant.txt \
+      -b $BR2_TOPDIR/vendor/intelli4u/build/board/$variant/compatible_$variant.txt \
       -ok kernel_image -oall ../$PREFIX -or rootfs_image \
-      -i $BR2_TOPDIR/vendor/intelli4u/buildroot/board/$variant/ambitCfg.h
+      -i $BR2_TOPDIR/vendor/intelli4u/build/board/$variant/ambitCfg.h
 
     rm -rf rootfs
   )
