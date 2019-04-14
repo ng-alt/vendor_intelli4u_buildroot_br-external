@@ -2,7 +2,7 @@
 
 TARGET_DIR=$BR2_OUTDIR/target
 
-STRIPCMD="arm-linux-strip --remove-section=.comment --remove-section=.note --strip-debug"
+STRIPCMD="arm-linux-strip --strip-unneeded"
 
 function exists {
   if [ -e $TARGET_DIR/$1 ] ; then
