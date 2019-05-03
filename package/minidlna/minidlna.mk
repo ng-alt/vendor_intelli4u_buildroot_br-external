@@ -8,6 +8,7 @@ MINIDLNA_SITE = http://downloads.sourceforge.net/project/minidlna/minidlna
 MINIDLNA_VERSION_FILE = upnpglobalvars.h
 MINIDLNA_LICENSE = GPL-2.0, BSD-3-Clause
 MINIDLNA_LICENSE_FILES = COPYING LICENCE.miniupnpd
+MINIDLNA_AUTOGEN = YES
 
 MINIDLNA_DEPENDENCIES = \
 	$(TARGET_NLS_DEPENDENCIES) \
@@ -48,4 +49,4 @@ define MINIDLNA_INSTALL_TARGET_CMDS
 	ln -sf minidlna $(TARGET_DIR)/usr/sbin/minidlna.exe
 endef
 
-$(eval $(generic-package))
+$(eval $(autotools-package))
