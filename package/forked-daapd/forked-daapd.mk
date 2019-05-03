@@ -37,16 +37,7 @@ define FORKED_DAAPD_COPY_M4_FILES
 	done
 endef
 
-define FORKED_DAAPD_PATCH_CODES
-	$(SED) 's,scan-wma.c \\,scan-wma.c cache.c \\,' $(@D)/src/Makefile.am
-	$(SED) 's,<event-config.h>,<event2/event-config.h>,' $(@D)/src/evhttp/http.c
-	$(SED) 's,<event-config.h>,<event2/event-config.h>,' $(@D)/src/evrtsp/rtsp.c
-	$(SED) 's,CodecID,AVCodecID,g' $(@D)/src/filescanner_ffmpeg.c
-	$(SED) 's,AVCODEC_MAX_AUDIO_FRAME_SIZE,192000,g' $(@D)/src/transcode.c
-	$(SED) 's|avcodec_find_best_pix_fmt(pix_fmt_mask, src->pix_fmt, 1, NULL)|PIX_FMT_NONE|' $(@D)/src/artwork.c
-endef
-
-FORKED_DAAPD_PRE_CONFIGURE_HOOKS += FORKED_DAAPD_COPY_M4_FILES FORKED_DAAPD_PATCH_CODES
+FORKED_DAAPD_PRE_CONFIGURE_HOOKS += FORKED_DAAPD_COPY_M4_FILES
 
 define FORKED_DAAPD_INSTALL_START_SCRIPT
 	$(INSTALL) -m 755 $(BR2_EXTERNAL_NETGEAR_PATH)/package/forked-daapd/start_forked-daapd.sh $(TARGET_DIR)/usr/sbin/
