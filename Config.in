@@ -66,6 +66,7 @@ menu "Hardware Handling"
 	source "package/hd-idle/Config.in"
 	source "package/hdparm/Config.in"
 	source "package/hotplug2/Config.in"
+	source "package/picocom/Config.in"
 	source "package/udev/Config.in"
 	source "package/usbmodem/Config.in"
 endmenu
