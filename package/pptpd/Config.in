@@ -1,0 +1,5 @@
+config BR2_PACKAGE_PPTPD
+	bool "pptpd"
+	help
+	  PoPToP Point to Point Tunneling Server
+
