@@ -108,7 +108,7 @@ export TARGETDIR := $(PLATFORMDIR)/target
 # /* Fxcn port-S Wins, 0707-09 */
 # export KERNELRELEASE=2.4.20
 # //----------
-export KERNELRELEASE=2.6.36
+# export KERNELRELEASE=2.6.36
 # /* Fxcn port-E Wins, 0707-09 */
 #export TOPDIR := $(BASEDIR)/components/opensource/linux/linux-2.6.36
 #export KERNELPATH := $(BASEDIR)/components/opensource/linux/linux-2.6.36
@@ -132,4 +132,12 @@ endif
 
 ifeq ($(CONFIG_BT_IGMP),y)
 CFLAGS += -DBT_IGMP_SUPPORT
+endif
+
+ifeq ($(CONFIG_OPENVPN),y)
+CFLAGS += -DOPENVPN_SUPPORT
+endif
+
+ifeq ($(CONFIG_DEVICE_IDENTIFICATION),y)
+CFLAGS += -DENABLE_DEVICE_DETECT
 endif
