@@ -10,6 +10,11 @@ BR2_ENVIRON_CONFIGS="$(BR2_EXTERNAL_NETGEAR_PATH)/board/common/build.config $(BR
 BR2_GLOBAL_EXPORT_VAR="PROFILE=R7000 VENDOR=merlin BRAND=NETGEAR"
 
 #
+# Filesystem images
+#
+BR2_TARGET_ROOTFS_SQUASHFS_ARGS="-regex -ef $(BR2_EXTERNAL_NETGEAR_PATH)/skeleton/merlin-exclude.txt"
+
+#
 # System configuration
 #
 # BR2_ROOTFS_SKELETON_DEFAULT is not set
