@@ -12,6 +12,7 @@ NFS_UTILS_DEPENDENCIES = host-pkgconf
 NFS_UTILS_CONF_ENV = knfsd_cv_bsd_signals=no
 
 NFS_UTILS_CONF_OPTS = \
+	--enable-shared \
 	--enable-nfsv3 \
 	--disable-nfsv4 \
 	--disable-nfsv41 \
