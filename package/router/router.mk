@@ -51,6 +51,16 @@ define ROUTER_ALL_MAKEFILES_INCLUDE_SUPPRESS_SUBROUTINE
 	find $(@D) -name 'Makefile' -exec $(SED) '/^include\s\+[$$\.].\+\/config\./ { s|include\s\+.\+/config\.|include $(BR2_EXTERNAL_NETGEAR_PATH)/package/router/src/config.|g }' {} \;
 endef
 
+# Set for linux kernel to build compressed kernel with vendor reference. As linux is built
+# before package router, add the dependencies to rsync this package.
+LINUX_DEPENDENCIES += router-rsync
+define ROUTER_BUILD_BOOT_IMAGE
+	cd $(ROUTER_SRCDIR)/compressed && \
+		$(TARGET_CONFIGURE_OPTS) $(MAKE1) $(ROUTER_MAKE_OPTS) all && \
+		cp vmlinuz $(BINARIES_DIR)/
+endef
+LINUX_POST_INSTALL_IMAGES_HOOKS += ROUTER_BUILD_BOOT_IMAGE
+
 define ROUTER_BUILD_CMDS
 	$(INSTALL) -m 0644 $(BR2_PACKAGE_ROUTER_CONFIG) $(@D)/.config;
 	$(INSTALL) -m 0644 $(BR2_EXTERNAL_NETGEAR_PATH)/package/router/src/config.in $(@D)/;
@@ -64,7 +74,6 @@ define ROUTER_INSTALL_TARGET_CMDS
 	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) \
 		$(ROUTER_MAKE_OPTS) INSTALLFLAGS=-m755 install
 	rsync -au $(@D)/arm-uclibc/target $(BASE_DIR)
-	cd $(@D)/compressed && $(TARGET_CONFIGURE_OPTS) $(MAKE1) $(ROUTER_MAKE_OPTS) all && cp vmlinuz $(BINARIES_DIR)/
 endef
 
 ifeq ($(BR2_PACKAGE_ROUTER),y)
