@@ -80,6 +80,15 @@ define ROUTER_FIX_ASUSNATL_PJPROJECT_CONFIGURE
 endef
 ROUTER_PRE_BUILD_HOOKS += ROUTER_FIX_ASUSNATL_PJPROJECT_CONFIGURE
 
+# Set for linux kernel to build compressed kernel with vendor reference. As linux is built
+# before package router, add the dependencies to rsync this package.
+LINUX_DEPENDENCIES += router-configure
+define ROUTER_BUILD_BOOT_IMAGE
+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(ROUTER_DIR)/compressed $(ROUTER_MAKE_OPTS) all && \
+		cp $(ROUTER_DIR)/compressed/vmlinuz $(BINARIES_DIR)/
+endef
+LINUX_POST_INSTALL_IMAGES_HOOKS += ROUTER_BUILD_BOOT_IMAGE
+
 define ROUTER_BUILD_CMDS
 	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) \
 		HOST=_LINUX $(ROUTER_MAKE_OPTS) all
