@@ -46,7 +46,7 @@ endef
 define MINIDLNA_INSTALL_TARGET_CMDS
 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) install \
 		DESTDIR=$(TARGET_DIR) TARGETDIR=$(TARGET_DIR) PREFIX=$(TARGET_DIR)
-	ln -sf minidlna $(TARGET_DIR)/usr/sbin/minidlna.exe
+	ln -sf minidlnad $(TARGET_DIR)/usr/sbin/minidlna.exe
 endef
 
 $(eval $(autotools-package))
