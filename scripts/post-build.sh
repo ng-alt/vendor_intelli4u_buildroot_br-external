@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TARGET_DIR=${BR2_OUTDIR}/target
+TARGET_DIR=${BR2_OUTDIR}target
 
 STRIPCMD="`ls $BR2_OUTDIR/host/bin/*-strip` --remove-section=.comment --remove-section=.note --strip-debug"
 
@@ -51,15 +51,23 @@ function remove_with_find_force {
   find $TARGET_DIR $* -exec rm -vrf {} \;
 }
 
+function remove_dir_with_find {
+  dir=$1
+  shift
+
+  # don't remove the targeted rootdir
+  find $TARGET_DIR$dir $* | grep -v $dir\$ | xargs rm -vrf
+}
+
 function remove_empty_dir_with_find {
-  find ${TARGET_DIR}$1 -type d -exec rmdir {} \; 2>/dev/null
-  find ${TARGET_DIR}$1 -type d -exec rmdir {} \; 2>/dev/null
-  find ${TARGET_DIR}$1 -type d -exec rmdir {} \; 2>/dev/null
-  find ${TARGET_DIR}$1 -type d -exec rmdir {} \; 2>/dev/null
+  find $TARGET_DIR$1 -type d -exec rmdir {} \; 2>/dev/null
+  find $TARGET_DIR$1 -type d -exec rmdir {} \; 2>/dev/null
+  find $TARGET_DIR$1 -type d -exec rmdir {} \; 2>/dev/null
+  find $TARGET_DIR$1 -type d -exec rmdir {} \; 2>/dev/null
 }
 
 function get_link {
-  ls -l $TARGET_DIR/$1 | awk ' { print $11 } '
+  ls -l $TARGET_DIR$1 | awk ' { print $11 } '
 }
 
 #-------------------------------------------
@@ -201,6 +209,9 @@ function clean_files {
   #------------------------------------------------------------------
   #- remove specified directories
   remove_force /usr/include /usr/aclocal /usr/doc /share/info /usr/share/terminfo
+
+  #- clean up usr/share except usr/share/new_opencrt
+  remove_dir_with_find /usr/share/ -type d -not -name new_opencrt
 
   #- clean up man pages
   remove_with_find_force -type d -name 'man'

@@ -157,6 +157,11 @@ define OPENSSL_REMOVE_BIN
 	$(RM) -f $(TARGET_DIR)/etc/ssl/misc/{CA.*,c_*}
 endef
 OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_REMOVE_BIN
+else
+define OPENSSL_SOFT_LINK_BIN_OPENSSL
+	mkdir -p $(TARGET_DIR)/usr/local/sbin && ln -s /usr/bin/openssl $(TARGET_DIR)/usr/local/sbin/openssl
+endef
+OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_SOFT_LINK_BIN_OPENSSL
 endif
 
 ifneq ($(BR2_PACKAGE_OPENSSL_ENGINES),y)
@@ -165,6 +170,11 @@ define OPENSSL_REMOVE_OPENSSL_ENGINES
 endef
 OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_REMOVE_OPENSSL_ENGINES
 endif
+
+define OPENSSL_INSTALL_NEW_OPENCRT_LIB
+	mkdir -p $(TARGET_DIR)/usr/share && cp -r $(@D)/new_opencrt $(TARGET_DIR)/usr/share
+endef
+OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_INSTALL_NEW_OPENCRT_LIB
 
 define OPENSSL_NO_INSTALLATION_MAN_FILES
 	$(SED) 's#install: all install_docs install_sw#install: all install_sw#g' $(@D)/Makefile
