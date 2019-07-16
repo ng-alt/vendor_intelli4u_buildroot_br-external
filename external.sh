@@ -1,5 +1,5 @@
 
-insert_path $BR2_TOPDIR/prebuilts/router/tools
+insert_path $BR2_TOPDIR/prebuilts/router/tools/$BR2_PRODUCT
 # Add trx_asus
 insert_path $BR2_TOPDIR/vendor/asus/base/ctools/prebuild
 
