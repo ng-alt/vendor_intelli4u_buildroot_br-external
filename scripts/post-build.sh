@@ -144,9 +144,6 @@ function clean_files {
   #- iconv
   remove /usr/bin/iconv
 
-  #- iperf
-  remove /usr/bin/iperf
-
   #- iptables
   remove_force /usr/lib/xtables
 
