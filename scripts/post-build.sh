@@ -219,8 +219,8 @@ function clean_files {
   #- clean up .h
   remove_with_find -type f -name '*.h'
 
-  #- clean up .a and .la
-  remove_with_find -type f \( -name '*.a' -o -name '*.la' \)
+  #- clean up .a, .la and .lai
+  remove_with_find -type f \( -name '*.a' -o -name '*.la' -o -name '*.lai' \)
 
   #- clean up kernel modules.*
   remove_with_find -type f -name 'modules.*'
