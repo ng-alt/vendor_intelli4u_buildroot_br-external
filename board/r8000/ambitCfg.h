@@ -45,24 +45,19 @@
 #define WLAN_REGION          WW_VERSION
 #define FW_REGION            WW_VERSION   /* true f/w region */
 
-#define HSDPA_DRIVER_VERSION ""
-#define HSDPA_SOFTWARE_VERSION ""
-
 /*formal version control*/
-#define AMBIT_HARDWARE_VERSION     "U12H270T00"
-#define AMBIT_SOFTWARE_VERSION     "V1.0.9.60"
-#define AMBIT_UI_VERSION           "10.2.60"
-#define STRING_TBL_VERSION         "1.0.9.60_2.1.38.1"
+#define AMBIT_HARDWARE_VERSION     "U12H315T00"
+#define AMBIT_SOFTWARE_VERSION     "V1.0.4.28"
+#define AMBIT_UI_VERSION           "10.1.54"
+#define STRING_TBL_VERSION         "1.0.4.28_2.1.49.1"
 
-#define AMBIT_PRODUCT_NAME          "R7000"
-#define AMBIT_PRODUCT_NAME_R6900P   "R6900P"
-#define AMBIT_PRODUCT_DESCRIPTION   "802.11ac Dual Band Gigabit Wireless Router R7000"
-#define UPnP_MODEL_URL              "R7000.aspx"
+#define AMBIT_PRODUCT_NAME          "R8000"
+#define AMBIT_PRODUCT_ALIAS         "Nighthawk X6"
+#define AMBIT_PRODUCT_DESCRIPTION   "802.11ac Dual Band Gigabit Wireless Router R8000"
+#define AMBIT_PRODUCT_NAME_TRI_BAND         "R8000"
+#define UPnP_MODEL_URL_TRI_BAND             "http://www.netgear.com/Products/RoutersandGateways/RangeMaxNEXTWirelessRoutersandGateways/R8000.aspx"
+#define UPnP_MODEL_URL              "R8000.aspx"
 #define UPnP_MODEL_DESCRIPTION      "802.11ac"
-#define AMBIT_SKU_VERSION           ""
-
-#define DF_2G_ROOTAP_SSID          "NETGEAR_DF_2G_465"
-#define DF_5G_ROOTAP_SSID          "NETGEAR_DF_5G_465"
 
 #define AMBIT_NVRAM_VERSION  "1" /* digital only */
 #define AMBIT_NVRAM_VERSION2  "2" /* digital only */
@@ -85,6 +80,9 @@
 #define LAN_IF_NAME_NUM             "vlan1"
 #define WLAN_IF_NAME_NUM            "eth1"
 #define WLAN_N_IF_NAME_NUM          "eth2"
+#if defined(R8000)
+#define WLAN_5G_2_IF_NAME_NUM          "eth3"
+#endif
 #define WDS_IF_NAME_NUM             "wds0.1"    /* WDS interface */
 
 /* Foxconn add start by aspen Bai, 11/13/2008 */
@@ -97,9 +95,34 @@
 #define WLAN_5G_BSS1_NAME_NUM       "wl1.1"     /* Multiple BSSID #2 */
 #define WLAN_5G_BSS2_NAME_NUM       "wl1.2"     /* Multiple BSSID #3 */
 #define WLAN_5G_BSS3_NAME_NUM       "wl1.3"     /* Multiple BSSID #4 */
+
 /* Foxconn add end, Tony W.Y. Wang, 03/22/2010 @For 5G*/
+#define WLAN_5G_2_BSS1_NAME_NUM       "wl2.1"     /* Multiple BSSID #2 */
+#define WLAN_5G_2_BSS2_NAME_NUM       "wl2.2"     /* Multiple BSSID #3 */
+#define WLAN_5G_2_BSS3_NAME_NUM       "wl2.3"     /* Multiple BSSID #4 */
 #endif /* MULTIPLE_SSID */
 /* Foxconn add end by aspen Bai, 11/13/2008 */
+
+/* CHANNEL definitions */
+#define NA_2G_CHS       "Auto,1,2,3,4,5,6,7,8,9,10,11"
+#define WW_5G_CHS_AUTO  "Auto"
+#define WW_2G_CHS       "Auto,1,2,3,4,5,6,7,8,9,10,11,12,13"
+#define WW_5G_CHS_1_20M "36,40,44,48"
+#define WW_5G_CHS_2_20M "52,56,60,64"
+#define WW_5G_CHS_3_20M "100,104,108,112,116,132,136,140"
+#define WW_5G_CHS_4_20M "149,153,157,161,165"
+#define WW_5G_CHS_1_40M "36,40,44,48"
+#define WW_5G_CHS_2_40M "52,56,60,64"
+#define WW_5G_CHS_3_40M "100,104,108,112,116,120,124,128,132,136"
+#define WW_5G_CHS_4_40M "149,153,157,161"
+#define TW_5G_CHS_2_20M "56,60,64"
+#define TW_5G_CHS_2_40M "60,64"
+#define JP_5G_CHS_3_20M "100,104,108,112,116,120,124,128,132,136,140"
+#define JP_5G_CHS_3_40M "100,104,108,112,116,120,124,128,132,136"
+#define JP_5G_CHS_3_80M "100,104,108,112,116,120,124,128"
+#define CE_5G_CHS_3_80M "100,104,108,112,116,120,124,128"
+
+
 
 /* GPIO definitions */
 /* Foxconn modified start, Wins, 04/11/2011 */
@@ -120,8 +143,10 @@
 
 #define GPIO_WIFI_2G_LED            13
 #define GPIO_WIFI_5G_LED            12
-#define GPIO_WIFI_SUMMARY_LED       15
-
+#define GPIO_WIFI_5G_2_LED          16
+#define GPIO_WIFI_SUMMARY_LED       14   // from 15 to 14 by ken
+ 
+#define GPIO_LED_SWITCH             19
 
 #define LANG_TBL_MTD_RD             "/dev/mtdblock"
 #define LANG_TBL_MTD_WR             "/dev/mtd"
@@ -138,7 +163,7 @@
 #define ST_SUPPORT_NUM              (9)        /* The maxium value can be 2-10. */
 #define LANG_TBL_MTD_START          (9)
 #define LANG_TBL_MTD_END            (LANG_TBL_MTD_START + ST_SUPPORT_NUM - 1)
-#define FLASH_MTD_ML_SIZE           0x10000
+#define FLASH_MTD_ML_SIZE           0x20000   /* 128k */
 #define BUILTIN_LANGUAGE            "English"
 
 #define BOOT_MTD_RD                  "/dev/mtdblock0"
@@ -207,8 +232,24 @@
 /* Foxconn Perry added end, 2011/04/13, for document URL */
 
 /* Foxconn Perry added start, 2011/08/17, for USB Support level */
-#define USB_support_level        "29"       /* pling modified 5->13, add bit 4 for Readyshare Vault *//*kathy modified 13->29, add bit 16 for ReadyCLOUD */
+#define USB_support_level        "29"       /* pling modified 5->13, add bit 4 for Readyshare Vault */
 /* Foxconn Perry added end, 2011/08/17, for USB Support level */
+
+#define DUAL_BAND_HW_VER                 "TBD"
+/* Foxconn add start, Snoopy.wu, 04/07/2015 */
+#define DUAL_BAND_NTGR_SPECIFIC_HW_ID    ""
+#define DUAL_BAND_NTGR_GENERIC_HW_ID     ""
+/* Foxconn add end, Snoopy.wu, 04/07/2015 */
+#define TRI_BAND_HW_VER                  "R8000"
+#define TRI_BAND_HW_VER_ALIAS                  "R7900"
+
+/* Foxconn added by Kathy, 11/19/2016 @ Fixed R8000P Mantis #17041 PnP-X dirver issue*/
+#define NTGR_SPECIFIC_HW_ID     "VEN_01f2&amp;DEV_0019&amp;REV_01" 
+#define NTGR_GENERIC_HW_ID      "VEN_01f2&amp;DEV_8000&amp;SUBSYS_01&amp;REV_01 VEN_01f2&amp;DEV_8000&amp;REV_01"
+
+/* Foxconn add start, Snoopy.wu, 04/07/2015 */
+#define TRI_BAND_NTGR_SPECIFIC_HW_ID     "VEN_01f2&amp;DEV_0019&amp;REV_01"
+#define TRI_BAND_NTGR_GENERIC_HW_ID      "VEN_01f2&amp;DEV_8000&amp;SUBSYS_01&amp;REV_01 VEN_01f2&amp;DEV_8000&amp;REV_01"
 
 #define WIRELESS_MODE_2G_LEGACY                 "54Mbps"
 #define WIRELESS_MODE_2G_HT20                   "289Mbps"
@@ -219,3 +260,4 @@
 #define WIRELESS_SUPPORT_MODE_2G                "54Mbps,289Mbps,600Mbps"
 #define WIRELESS_SUPPORT_MODE_5G                "289Mbps,600Mbps,1300Mbps"
 #endif /*_AMBITCFG_H*/
+

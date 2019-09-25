@@ -229,7 +229,7 @@ function clean_files {
 
 function update_kobjs {
   # follow asus-merlin router/Makefile to shorten ko paths
-  mv -f $TARGET_DIR/lib/modules/*/kernel/drivers/net/{bcm57xx,ctf,ctf_5358,et,et.4702,emf,igs,wl}/*.ko $TARGET_DIR/lib/modules/*/kernel/drivers/net/ 2>/dev/null
+  mv -f $TARGET_DIR/lib/modules/*/kernel/drivers/net/{bcm57xx,bonding,ctf,ctf_5358,et,et.4702,emf,igs,wl}/*.ko $TARGET_DIR/lib/modules/*/kernel/drivers/net/ 2>/dev/null
   mv -f $TARGET_DIR/lib/modules/*/kernel/drivers/net/wl/{wl_high,wl_sta}/wl_high.ko $TARGET_DIR/lib/modules/*/kernel/drivers/net/ 2>/dev/null
   mv -f $TARGET_DIR/lib/modules/*/kernel/drivers/usb/{hcd,host,storage,serial,core,class,misc}/*.ko $TARGET_DIR/lib/modules/*/kernel/drivers/usb/ 2>/dev/null
 

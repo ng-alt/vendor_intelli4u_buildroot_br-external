@@ -7,7 +7,7 @@
 ACCEL_PPTP_SITE = http://accel-pptp.sourceforge.net
 ACCEL_PPTP_VERSION_FILE = pptpd-1.3.3/configure.in
 ACCEL_PPTP_LICENSE = GPLv2
-ACCEL_PPTP_DEPENDENCIES = pppd
+ACCEL_PPTP_DEPENDENCIES = linux pppd
 
 define ACCEL_PPTPD_BUILD_CMDS
 	cd $(@D)/pptpd-1.3.3 && $(TARGET_CONFIGURE_OPTS) ./configure \

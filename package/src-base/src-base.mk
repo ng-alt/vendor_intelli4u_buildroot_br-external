@@ -10,6 +10,9 @@ SRC_BASE_VERSION_PATTERN = "\#\s*define\s+AMBIT_SOFTWARE_VERSION\s+\"([^\"]+)\""
 
 SRC_BASE_MAKE = $(MAKE1)
 
+LINUX_DEPENDENCIES += src-base
+LINUX_MAKE_OPTS += SRC_BASE_DIR=$(SRC_BASE_DIR)
+
 SRC_BASE_OVERRIDED_TARGET = $(call qstrip,$(BR2_PACKAGE_SRC_BASE_OVERRIDED_TARGET))
 # build the referred .config with original asus solution.
 # target.mak contains the initial configuration for router variants and the overrided
