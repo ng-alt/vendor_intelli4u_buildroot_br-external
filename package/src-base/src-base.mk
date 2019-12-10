@@ -5,8 +5,8 @@
 ################################################################################
 
 SRC_BASE_REF_DIR = $(BR2_TOPDIR)vendor/asus/base
-SRC_BASE_VERSION_FILE = $(BR2_TOPDIR)vendor/netgear/acos/include/ambitCfg.h
-SRC_BASE_VERSION_PATTERN = "\#\s*define\s+AMBIT_SOFTWARE_VERSION\s+\"([^\"]+)\""
+SRC_BASE_VERSION_FILE = version.conf
+SRC_BASE_VERSION_PATTERN = "SERIALNO\s*=\s*(.+)"
 
 SRC_BASE_MAKE = $(MAKE1)
 
